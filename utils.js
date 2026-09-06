@@ -2,8 +2,6 @@ const proxyaddr = require('proxy-addr');
 const Buffer = require('safe-buffer').Buffer
 const contentType = require('content-type');
 const { mime } = require('send');
-
-const env = process.env.NODE_ENV || 'local'
 const onFinished = require('on-finished');
 
 exports.isAbsolute = function(path) {
@@ -11,6 +9,22 @@ exports.isAbsolute = function(path) {
     if (':' === path[1] && ('\\' === path[2] || '/' === path[2])) return true;
     if ('\\\\' === path.substring(0, 2)) return true;
 };
+
+function acceptParams(str, index) {
+    var parts = str.split(/ *; */);
+    var ret = { value: parts[0], quality: 1, params: {}, originalIndex: index };
+    for (var i = 1; i < parts.length; ++i) {
+        var pms = parts[i].split(/ *= */);
+        if ('q' === pms[0]) {
+            ret.quality = parseFloat(pms[1]);
+        } else {
+            ret.params[pms[0]] = pms[1];
+        }
+    }
+    return ret;
+}
+
+exports.acceptParams = acceptParams;
 
 exports.normalizeType = function(type) {
     return ~type.indexOf('/') ?
@@ -67,17 +81,9 @@ exports.stringify = function stringify(value, replacer, spaces, escape) {
         JSON.stringify(value);
 
     if (escape) {
+        var escapeChars = { '<': '\\u003c', '>': '\\u003e', '&': '\\u0026' };
         json = json.replace(/[<>&]/g, function(c) {
-            switch (c.charCodeAt(0)) {
-                case 0x3c:
-                    return '\\u003c'
-                case 0x3e:
-                    return '\\u003e'
-                case 0x26:
-                    return '\\u0026'
-                default:
-                    return c
-            }
+            return escapeChars[c];
         })
     }
 

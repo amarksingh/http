@@ -54,18 +54,18 @@ class RedirectResponse extends RedirectResponseContract {
         return this.to(this[kUrl])
     }
 
-    withErrors() {
-        this[kErrors] = arguments
+    withErrors(...errors) {
+        this[kErrors] = errors
         return this
     }
 
-    withInput() {
-        this[kInputs] = arguments.length ? arguments : [true]
+    withInput(...inputs) {
+        this[kInputs] = inputs.length ? inputs : [true]
         return this
     }
 
-    with() {
-        this[kFlash] = arguments
+    with(...flash) {
+        this[kFlash] = flash
         return this
     }
 

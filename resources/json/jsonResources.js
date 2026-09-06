@@ -17,7 +17,7 @@ class JsonResources {
     }
     
     static resource(obj) {
-        if (typeof obj != 'object' && Array.isArray(obj))
+        if (typeof obj != 'object' || Array.isArray(obj) || obj === null)
             throw new InvalidObjectException(`Data should be obj`)
         return this.toObject(obj)
     }

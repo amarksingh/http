@@ -13,7 +13,7 @@ class Compression {
     $cacheControlNoTransformRegExp = /(?:^|,)\s*?no-transform\s*?(?:,|$)/;
 
     constructor() {
-        this[kOptions] = { ...(this.$defaultOptions || {}),
+        this[kOptions] = { ...(this.$defaultOptions),
             ...(this.$options || {})
         }
     }
@@ -111,7 +111,8 @@ class Compression {
 
             vary(response, 'Accept-Encoding')
 
-            if (Number(response.getHeader('Content-Length')) < threshold || length < threshold) {
+            var contentLength = Number(response.getHeader('Content-Length')) || length;
+            if (contentLength !== undefined && contentLength < threshold) {
                 nocompress(response, _on, 'size below threshold')
                 return
             }

@@ -25,6 +25,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) {
         this.aborted = req.aborted;
         this.upgrade = req.upgrade;
         this.url = req.url;
+        this.method = req.method;
         this.statusCode = req.statusCode;
         this.statusMessage = req.statusMessage;
         this.files = {};
@@ -118,7 +119,8 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) {
         var proto = this.connection.encrypted ?
             'https' :
             'http';
-        if (!compileTrust(this.connection.remoteAddress, 0)) {
+        var trust = this.app ? this.app['trust.proxy'] : undefined;
+        if (!compileTrust(trust)(this.connection.remoteAddress, 0)) {
             return proto;
         }
         var header = this.get('X-Forwarded-Proto') || proto
@@ -134,11 +136,13 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) {
     }
 
     ip() {
-        return proxyaddr(this, compileTrust);
+        var trust = this.app ? this.app['trust.proxy'] : undefined;
+        return proxyaddr(this, compileTrust(trust));
     }
 
     ips() {
-        var addrs = proxyaddr.all(this, compileTrust);
+        var trust = this.app ? this.app['trust.proxy'] : undefined;
+        var addrs = proxyaddr.all(this, compileTrust(trust));
         addrs.reverse().pop()
         return addrs
     }
@@ -173,7 +177,8 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) {
     hostname() {
         var host = this.get('X-Forwarded-Host');
 
-        if (!host || !compileTrust(this.connection.remoteAddress, 0)) {
+        var trust = this.app ? this.app['trust.proxy'] : undefined;
+        if (!host || !compileTrust(trust)(this.connection.remoteAddress, 0)) {
             host = this.get('Host');
         } else if (host.indexOf(',') !== -1) {
 
@@ -301,7 +306,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) {
     }
 
     isMethod(value) {
-        return Boolean((this.method == value.toUpperCase()))
+        return Boolean(this.method && this.method.toUpperCase() === value.toUpperCase())
     }
 
     ajax() {
@@ -348,7 +353,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) {
         let $userinfo = this.getUser();
 
         let $pass = this.getPassword();
-        if ('' != $pass) {
+        if ($pass !== undefined && '' != $pass) {
             $userinfo += ":" + $pass;
         }
 
@@ -358,8 +363,6 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) {
     __get(target, key) {
         if (target.has(key))
             return target.input(key)
-        else if (target.files[key])
-            return this.files[key]
         return this.make(target[kRequest], key)
     }
 

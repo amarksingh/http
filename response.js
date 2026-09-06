@@ -8,8 +8,8 @@ const {
     normalizeTypes,
     setCharset,
     stringify,
-    sendfile
 } = require('./utils');
+const utils = require('./utils');
 
 const {
     extname,
@@ -108,10 +108,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) {
             this.header('Content-Length', len);
         }
         if (len !== undefined) {
-            var buf = !Buffer.isBuffer(body) ?
-                Buffer.from(body, encoding) :
-                body
-            this.header('ETag', etag(buf, { weak: true }));
+            this.header('ETag', etag(chunk, { weak: true }));
         }
 
         if (this.fresh) this.statusCode = 304;
@@ -148,7 +145,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) {
 
     jsonp(obj, ...rest) {
         rest = Array.from(rest)
-        var callback = rest.find(arg => typeof arg == 'string');
+        var callback = rest.find(arg => typeof arg == 'string' || Array.isArray(arg));
         this.statusCode = rest.find(arg => typeof arg == 'number') || 200;
         var body = stringify(obj, null, 2, null)
         if (!this.header('Content-Type',)) {
@@ -205,7 +202,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) {
         }
         var pathname = encodeURI(path);
         var file = send(req, pathname, opts);
-        sendfile(res, file, opts, function (err) {
+        utils.sendfile(res[kResponse], file, opts, function (err) {
             if (done) return done(err);
             if (err && err.code === 'EISDIR') return next();
             if (err && err.code !== 'ECONNABORTED' && err.syscall !== 'write') {

@@ -33,7 +33,6 @@ class CrossOrigin {
         // Check whether origin is allowed. Support '*', exact match, and hostname-only matches
         const originAllowed = (origin) => {
             if (!origin) return false;
-            if (origins.includes('*')) return true;
             if (origins.includes(origin)) return true;
             const stripped = origin.replace(/(^\w+:|^)\/\//, ''); // remove protocol if present
             if (origins.includes(stripped)) return true;

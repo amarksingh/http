@@ -5,11 +5,11 @@ class ServeStatic {
     $options = {};
 
     constructor() {
-        this.$publicPath = this.$app['path.public']
+        this.$publicPath = this.$app ? this.$app['path.public'] : (typeof $app !== 'undefined' ? $app['path.public'] : '');
     }
 
     handle({ request, response, next }) {
-        serveStatic(this.$publicPath, { ...this.$defaultOptions, ...this.options })(request, response, next)
+        serveStatic(this.$publicPath, { ...this.$defaultOptions, ...(this.$options || this.options || {}) })(request, response, next)
     }
 }
 
