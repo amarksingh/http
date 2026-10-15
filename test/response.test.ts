@@ -345,7 +345,7 @@ describe('HttpResponse', () => {
         expect(() => res.sendFile(123)).toThrow(TypeError);
         expect(() => res.sendFile('relative/file.txt')).toThrow(TypeError);
 
-        const dummyFile = path.join(__dirname, 'exceptions_and_resources.test.js');
+        const dummyFile = path.join(__dirname, 'exceptions_and_resources.test.ts');
         await new Promise((resolve) => {
             res.sendFile(dummyFile, (err) => {
                 expect(err).toBeFalsy();
@@ -503,7 +503,7 @@ describe('HttpResponse', () => {
         // download() without filename argument (falls back to path) and with content-disposition header in options
         const resDlPath = new HttpResponse(createMockRawRes().rawRes);
         resDlPath.request = createMockRawRes().req;
-        const dummyFile = path.join(__dirname, 'exceptions_and_resources.test.js');
+        const dummyFile = path.join(__dirname, 'exceptions_and_resources.test.ts');
         await new Promise((resolve) => {
             resDlPath.download(dummyFile, {
                 headers: {
