@@ -1,3 +1,5 @@
+import type { IHttpRequest } from '@ostro/contracts/http/request';
+
 var accepts = require('accepts');
 var { isIP } = require('net');
 const { pathToRegexp } = require('path-to-regexp', { decode: decodeURIComponent });
@@ -6,23 +8,25 @@ var fresh = require('fresh');
 var parseRange = require('range-parser');
 var parse = require('parseurl');
 var proxyaddr = require('proxy-addr');
-const { compileTrust } = require('./utils')
-const kRequest = Symbol('request')
-const { Macroable } = require('@ostro/support/macro')
-const HttpRequestContract = require('@ostro/contracts/http/request')
-let booleanValue = [1, "1", true, "true", "on", "yes"]
+const { compileTrust } = require('./utils');
+const kRequest = Symbol('request');
+const { Macroable } = require('@ostro/support/macro');
+const HttpRequestContract = require('@ostro/contracts/http/request');
+let booleanValue = [1, "1", true, "true", "on", "yes"];
 
 /**
  * Class HttpRequest.
  */
-class HttpRequest extends Macroable.extend(HttpRequestContract) {
+class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttpRequest {
+    [kRequest]: any;
+
     /**
      * Create a new instance.
      * @param {*} req
      */
     constructor(req: any) {
-        super()
-        Object.defineProperty(this, kRequest, { value: req })
+        super();
+        Object.defineProperty(this, kRequest, { value: req });
         this.httpVersionMajor = req.httpVersionMajor;
         this.httpVersionMinor = req.httpVersionMinor;
         this.httpVersion = req.httpVersion;

@@ -21,21 +21,24 @@ const mime = send.mime;
 const vary = require('vary');
 const etag = require('etag');
 var charsetRegExp = /;\s*charset\s*=/;
-const kResponse = Symbol('response')
-const { Macroable } = require('@ostro/support/macro')
-const HttpResponseContract = require('@ostro/contracts/http/response')
+const kResponse = Symbol('response');
+const { Macroable } = require('@ostro/support/macro');
+const HttpResponseContract = require('@ostro/contracts/http/response');
+import type { IHttpResponse } from '@ostro/contracts/http/response';
+
 /**
  * Class HttpResponse.
  */
-class HttpResponse extends Macroable.extend(HttpResponseContract) {
+class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHttpResponse {
+    [kResponse]: any;
 
     /**
      * Create a new instance.
      * @param {*} res
      */
     constructor(res: any) {
-        super()
-        Object.defineProperty(this, kResponse, { value: res })
+        super();
+        Object.defineProperty(this, kResponse, { value: res });
     }
 
     /**
