@@ -6,7 +6,7 @@ class URL {
      * Create a new instance.
      * @param {*} url
      */
-    constructor(url) {
+    constructor(url: string) {
         this.$url = url
         this.$segments = url.pathname.split('/')
     }
@@ -15,7 +15,7 @@ class URL {
      * @param {*} index
      * @returns {any}
      */
-    segment(index) {
+    segment(index: number) {
         return this.$segments[index]
     }
 }

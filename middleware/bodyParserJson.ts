@@ -16,7 +16,7 @@ class BodyParserJson {
      * @param {*} next }
      * @returns {any}
      */
-    handle({ request, response, next }) {
+    handle({ request, response, next }: Record<string, any>) {
         bodyParser.json({
             ...this.$defaultOptions,
             ...this.$options

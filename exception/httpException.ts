@@ -14,7 +14,7 @@ class HttpException extends HttpExceptionContract {
      * @param {*} $message
      * @param {*} $headers
      */
-    constructor($statusCode, $message = '', $headers = {}) {
+    constructor($statusCode: any, $message: string = '', $headers: Record<string, any> = {}) {
         super($message);
         this.name = this.constructor.name;
         this.statusCode = $statusCode;
@@ -45,7 +45,7 @@ class HttpException extends HttpExceptionContract {
      * @param {*} $headers
      * @returns {any}
      */
-    setHeaders($headers) {
+    setHeaders($headers: Record<string, any>) {
         this.headers = $headers;
     }
 }

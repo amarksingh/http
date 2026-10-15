@@ -13,7 +13,7 @@ class QueryParser {
      * @param {*} next }
      * @returns {any}
      */
-    handle({ request, response, next }) {
+    handle({ request, response, next }: Record<string, any>) {
         request.query = qs.parse(request._parsedUrl.query, {
             allowPrototypes: this.$extended
         })

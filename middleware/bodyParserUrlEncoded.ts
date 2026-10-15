@@ -18,7 +18,7 @@ class BodyParserUrlEncoded {
      * @param {*} next }
      * @returns {any}
      */
-    handle({ request, response, next }) {
+    handle({ request, response, next }: Record<string, any>) {
         bodyParser.urlencoded({
             ...this.$defaultOptions,
             ...this.$options

@@ -19,7 +19,7 @@ class CrossOrigin {
      * @param {*} next }
      * @returns {any}
      */
-    handle({ request, response, next }) {
+    handle({ request, response, next }: Record<string, any>) {
         // Helper: normalize header arrays to array of strings.
         // Accepts:
         // - array of strings (items may contain commas)

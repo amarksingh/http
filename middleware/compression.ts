@@ -30,7 +30,7 @@ class Compression {
      * @param {*} next }
      * @returns {any}
      */
-    handle({ request, response, next }) {
+    handle({ request, response, next }: Record<string, any>) {
         if (request.httpVersion == '2.0') {
             return next()
         }
@@ -200,7 +200,7 @@ class Compression {
      * @param {*} listeners
      * @returns {any}
      */
-    addListeners(stream, on, listeners) {
+    addListeners(stream: any, on: any, listeners: any) {
         for (var i = 0; i < listeners.length; i++) {
             on.apply(stream, listeners[i])
         }
@@ -212,7 +212,7 @@ class Compression {
      * @param {*} encoding
      * @returns {any}
      */
-    chunkLength(chunk, encoding) {
+    chunkLength(chunk: any, encoding: any) {
         if (!chunk) {
             return 0
         }
@@ -228,7 +228,7 @@ class Compression {
      * @param {*} response
      * @returns {any}
      */
-    shouldCompress(request, response) {
+    shouldCompress(request: any, response: any) {
         var type = response.getHeader('Content-Type')
 
         if (type === undefined || !compressible(type)) {
@@ -244,7 +244,7 @@ class Compression {
      * @param {*} response
      * @returns {any}
      */
-    shouldTransform(request, response) {
+    shouldTransform(request: any, response: any) {
         var cacheControl = response.getHeader('Cache-Control')
 
         return !cacheControl ||
@@ -257,7 +257,7 @@ class Compression {
      * @param {*} encoding
      * @returns {any}
      */
-    toBuffer(chunk, encoding) {
+    toBuffer(chunk: any, encoding: any) {
         return !Buffer.isBuffer(chunk) ?
             Buffer.from(chunk, encoding) :
             chunk

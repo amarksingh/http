@@ -9,7 +9,7 @@ class ThrottleRequestsException extends HttpException {
      * @param {*} $message
      * @param {*} $headers
      */
-    constructor($retryAfter = null, $message = '', $headers = {}) {
+    constructor($retryAfter: any = null, $message: string = '', $headers: Record<string, any> = {}) {
         if ($retryAfter) {
             $headers['Retry-After'] = $retryAfter;
         }

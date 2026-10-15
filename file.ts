@@ -9,7 +9,7 @@ class File extends FileContract {
      * Create a new instance.
      * @param {*} data
      */
-    constructor(data) {
+    constructor(data: Record<string, any>) {
         super()
         Object.defineProperties(this, {
             filename: {

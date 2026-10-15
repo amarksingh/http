@@ -12,7 +12,7 @@ class JsonResources {
      * @param {*} obj
      * @returns {any}
      */
-    static toObject(obj) {
+    static toObject(obj: any) {
         return obj
     }
 
@@ -22,7 +22,7 @@ class JsonResources {
      * @param {*} datas
      * @returns {any}
      */
-    static collection(datas) {
+    static collection(datas: any) {
         if (datas instanceof CollectionInterface)
             datas = datas.all()
         if (!Array.isArray(datas))
@@ -37,7 +37,7 @@ class JsonResources {
      * @param {*} obj
      * @returns {any}
      */
-    static resource(obj) {
+    static resource(obj: any) {
         if (typeof obj != 'object' || Array.isArray(obj) || obj === null)
             throw new InvalidObjectException(`Data should be obj`)
         return this.toObject(obj)

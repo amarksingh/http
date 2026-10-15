@@ -20,7 +20,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) {
      * Create a new instance.
      * @param {*} req
      */
-    constructor(req) {
+    constructor(req: any) {
         super()
         Object.defineProperty(this, kRequest, { value: req })
         this.httpVersionMajor = req.httpVersionMajor;
@@ -43,7 +43,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) {
      * @param {*} name
      * @returns {any}
      */
-    get(name) {
+    get(name: string) {
         return this.header(name);
     }
 
@@ -53,7 +53,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) {
      * @param {*} defaultValue
      * @returns {any}
      */
-    header(name, defaultValue = undefined) {
+    header(name: string, defaultValue: any = undefined) {
         if (!name) {
             throw new TypeError('name argument is required to get');
         }
@@ -77,7 +77,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) {
      * @param {*} key
      * @returns {any}
      */
-    hasHeader(key) {
+    hasHeader(key: string) {
         return typeof this.get(key) != 'undefined'
     }
 
@@ -147,7 +147,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) {
      * @param {*} options
      * @returns {any}
      */
-    range(size, options) {
+    range(size: number, options: Record<string, any>) {
         var range = this.get('Range');
         if (!range) return;
         return parseRange(size, range, options);
@@ -159,7 +159,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) {
      * @param {*} defaultValue
      * @returns {any}
      */
-    param(name, defaultValue) {
+    param(name: string, defaultValue: any) {
         var params = this.params || {};
 
         if (null != params[name] && params.hasOwnProperty(name)) return params[name];
@@ -172,7 +172,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) {
      * @param {*} types
      * @returns {any}
      */
-    is(types) {
+    is(types: any) {
         var arr = types;
         if (!Array.isArray(types)) {
             arr = new Array(arguments.length);
@@ -259,7 +259,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) {
      * @param {*} num
      * @returns {any}
      */
-    segment(num) {
+    segment(num: any) {
         return this.segments()[num]
     }
 
@@ -310,7 +310,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) {
      * @param {*} res
      * @returns {any}
      */
-    fresh(res) {
+    fresh(res: any) {
         var method = this.method;
         var status = res.statusCode
         if ('GET' !== method && 'HEAD' !== method) return false;
@@ -350,7 +350,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) {
      * @param {*} value
      * @returns {any}
      */
-    input(key, value) {
+    input(key: string, value: any) {
         return (this.all()[key] || value) || null
     }
 
@@ -359,7 +359,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) {
      * @param {*} key
      * @returns {any}
      */
-    boolean(key) {
+    boolean(key: string) {
         return Boolean(booleanValue.includes(this.input(key)))
     }
 
@@ -368,7 +368,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) {
      * @param {*} keys
      * @returns {any}
      */
-    hasAny(keys = []) {
+    hasAny(keys: any[] = []) {
         let allInputsKeys = Object.keys(this.all())
         return Boolean(keys.filter(value => allInputsKeys.includes(value)).length)
     }
@@ -378,7 +378,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) {
      * @param {*} key
      * @returns {any}
      */
-    filled(key) {
+    filled(key: string) {
         return !!this.input(key)
     }
 
@@ -387,7 +387,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) {
      * @param {*} key
      * @returns {any}
      */
-    missing(key) {
+    missing(key: string) {
         return !(key in this.all())
     }
 
@@ -397,7 +397,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) {
      * @param {*} value
      * @returns {any}
      */
-    getQuery(key, value) {
+    getQuery(key: string, value: any) {
         return key ? (this.query[key] || value) : this.query
     }
 
@@ -407,7 +407,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) {
      * @param {*} value
      * @returns {any}
      */
-    getBody(key, value) {
+    getBody(key: string, value: any) {
         return key ? (this.body[key] || value) : this.body
     }
 
@@ -417,7 +417,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) {
      * @param {*} value
      * @returns {any}
      */
-    add(key, value) {
+    add(key: string, value: any) {
         this.body[key] = value
     }
 
@@ -452,7 +452,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) {
      * @param {*} key
      * @returns {any}
      */
-    has(key) {
+    has(key: string) {
         key = !Array.isArray(key) ? [key] : key
         return this.hasAny(key)
     }
@@ -481,7 +481,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) {
      * @param {*} key
      * @returns {any}
      */
-    file(key) {
+    file(key: string) {
         return this.files[key]
     }
 
@@ -491,7 +491,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) {
      * @param {*} value
      * @returns {any}
      */
-    hasFile(key, value = false) {
+    hasFile(key: string, value: boolean = false) {
         return Boolean(this.files[key] || value)
     }
 
@@ -500,7 +500,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) {
      * @param {*} value
      * @returns {any}
      */
-    isMethod(value) {
+    isMethod(value: any) {
         return Boolean(this.method && this.method.toUpperCase() === value.toUpperCase())
     }
 
@@ -549,7 +549,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) {
      * @param {*} except
      * @returns {any}
      */
-    fullUrlIs(except) {
+    fullUrlIs(except: any) {
         return pathToRegexp(except).test(this.url)
     }
 
@@ -602,7 +602,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) {
      * @param {*} key
      * @returns {any}
      */
-    __get(target, key) {
+    __get(target: Record<string, any>, key: string) {
         if (target.has(key))
             return target.input(key)
         return this.make(target[kRequest], key)

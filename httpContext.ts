@@ -14,7 +14,7 @@ class HttpContext extends Macroable {
      * @param {*} response
      * @param {*} next
      */
-    constructor(request, response, next) {
+    constructor(request: any, response: any, next: Function) {
         super()
         Object.defineProperty(this, 'request', {
             value: request,
@@ -39,7 +39,7 @@ class HttpContext extends Macroable {
      * @param {*} next
      * @returns {any}
      */
-    setCurrentNext(next) {
+    setCurrentNext(next: Function) {
         this.$next = next
     }
 

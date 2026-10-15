@@ -15,7 +15,7 @@ class RedirectResponse extends RedirectResponseContract {
      * Create a new instance.
      * @param {*} response
      */
-    constructor(response) {
+    constructor(response: any) {
         super()
         Object.defineProperties(this, {
             [kUrl]: {
@@ -45,7 +45,7 @@ class RedirectResponse extends RedirectResponseContract {
      * @param {*} url
      * @returns {any}
      */
-    to(url) {
+    to(url: string) {
         this[kUrl] = url
         if (this[kResponse]) {
             process.nextTick(() => {
@@ -62,7 +62,7 @@ class RedirectResponse extends RedirectResponseContract {
      * @param {*} url
      * @returns {any}
      */
-    away(url) {
+    away(url: string) {
         this[kResponse].redirect(url);
     }
 
@@ -80,7 +80,7 @@ class RedirectResponse extends RedirectResponseContract {
      * @param {*} errors
      * @returns {any}
      */
-    withErrors(...errors) {
+    withErrors(...errors: any[]) {
         this[kErrors] = errors
         return this
     }
@@ -90,7 +90,7 @@ class RedirectResponse extends RedirectResponseContract {
      * @param {*} inputs
      * @returns {any}
      */
-    withInput(...inputs) {
+    withInput(...inputs: any[]) {
         this[kInputs] = inputs.length ? inputs : [true]
         return this
     }
@@ -100,7 +100,7 @@ class RedirectResponse extends RedirectResponseContract {
      * @param {*} flash
      * @returns {any}
      */
-    with(...flash) {
+    with(...flash: any[]) {
         this[kFlash] = flash
         return this
     }
@@ -163,7 +163,7 @@ class RedirectResponse extends RedirectResponseContract {
      * @param {*} method
      * @returns {any}
      */
-    static __get(target, method) {
+    static __get(target: Record<string, any>, method: string) {
         return this.make(new target, method)
     }
 
