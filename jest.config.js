@@ -22,9 +22,9 @@ module.exports = {
         "^@ostro/container/(.*)$": "<rootDir>/../container/$1",
         "^@ostro/container$": "<rootDir>/../container",
         "^@ostro/filesystem/(.*)$": "<rootDir>/../filesystem/$1",
-        "^@ostro/filesystem$": "<rootDir>/../filesystem/filesystemManager.js",
+        "^@ostro/filesystem$": "<rootDir>/../filesystem/filesystemManager",
         "^@ostro/http/(.*)$": "<rootDir>/$1",
-        "^@ostro/http$": "<rootDir>/index.js"
+        "^@ostro/http$": "<rootDir>/index"
     },
     "collectCoverage": true,
     "coverageDirectory": "coverage",
@@ -34,7 +34,7 @@ module.exports = {
         "clover"
     ],
     "collectCoverageFrom": [
-        "<rootDir>/**/*.js",
+        "<rootDir>/**/*.ts",
         "!<rootDir>/test/**",
         "!<rootDir>/coverage/**",
         "!<rootDir>/node_modules/**",
