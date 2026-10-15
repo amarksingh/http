@@ -1,5 +1,12 @@
 const TokenMismatchExceptionContract = require('@ostro/contracts/http/tokenMismatchException')
+/**
+ * Class TokenMismatchException.
+ */
 class TokenMismatchException extends TokenMismatchExceptionContract {
+    /**
+     * Create a new instance.
+     * @param {*} message
+     */
     constructor(message) {
         super();
         this.name = this.constructor.name;

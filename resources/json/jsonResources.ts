@@ -2,11 +2,26 @@ const InvalidArrayException = require('./invalidArrayException')
 const InvalidObjectException = require('./invalidObjectException')
 const CollectionInterface = require('@ostro/contracts/collection/collect')
 
+/**
+ * Class JsonResources.
+ */
 class JsonResources {
+    /**
+     * toObject method.
+     * @static
+     * @param {*} obj
+     * @returns {any}
+     */
     static toObject(obj) {
         return obj
     }
 
+    /**
+     * collection method.
+     * @static
+     * @param {*} datas
+     * @returns {any}
+     */
     static collection(datas) {
         if (datas instanceof CollectionInterface)
             datas = datas.all()
@@ -16,6 +31,12 @@ class JsonResources {
         return datas.map(data => (this.toObject(data)))
     }
     
+    /**
+     * resource method.
+     * @static
+     * @param {*} obj
+     * @returns {any}
+     */
     static resource(obj) {
         if (typeof obj != 'object' || Array.isArray(obj) || obj === null)
             throw new InvalidObjectException(`Data should be obj`)

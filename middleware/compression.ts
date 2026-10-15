@@ -5,6 +5,9 @@ const onHeaders = require('on-headers')
 const vary = require('vary')
 const zlib = require('zlib')
 const kOptions = Symbol('options')
+/**
+ * Class Compression.
+ */
 class Compression {
 
     $defaultOptions = { threshold: 1024 };
@@ -12,11 +15,21 @@ class Compression {
 
     $cacheControlNoTransformRegExp = /(?:^|,)\s*?no-transform\s*?(?:,|$)/;
 
+    /**
+     * Create a new instance.
+     */
     constructor() {
         this[kOptions] = { ...(this.$defaultOptions),
             ...(this.$options || {})
         }
     }
+    /**
+     * handle method.
+     * @param {*} { request
+     * @param {*} response
+     * @param {*} next }
+     * @returns {any}
+     */
     handle({ request, response, next }) {
         if (request.httpVersion == '2.0') {
             return next()
@@ -92,11 +105,22 @@ class Compression {
             return this
         }
 
+        /**
+         * nocompress handler.
+         * @param {*} msg
+         * @returns {any}
+         */
         function nocompress(msg) {
             self.addListeners(response, _on, listeners)
             listeners = null
         }
 
+        /**
+         * onHeaders method.
+         * @param {*} response
+         * @param {*} function onResponseHeaders(
+         * @returns {any}
+         */
         onHeaders(response, function onResponseHeaders() {
 
             if (!self.shouldCompress(request, response)) {
@@ -169,12 +193,25 @@ class Compression {
 
     }
 
+    /**
+     * addListeners method.
+     * @param {*} stream
+     * @param {*} on
+     * @param {*} listeners
+     * @returns {any}
+     */
     addListeners(stream, on, listeners) {
         for (var i = 0; i < listeners.length; i++) {
             on.apply(stream, listeners[i])
         }
     }
 
+    /**
+     * chunkLength method.
+     * @param {*} chunk
+     * @param {*} encoding
+     * @returns {any}
+     */
     chunkLength(chunk, encoding) {
         if (!chunk) {
             return 0
@@ -185,6 +222,12 @@ class Compression {
             chunk.length
     }
 
+    /**
+     * shouldCompress method.
+     * @param {*} request
+     * @param {*} response
+     * @returns {any}
+     */
     shouldCompress(request, response) {
         var type = response.getHeader('Content-Type')
 
@@ -195,6 +238,12 @@ class Compression {
         return true
     }
 
+    /**
+     * shouldTransform method.
+     * @param {*} request
+     * @param {*} response
+     * @returns {any}
+     */
     shouldTransform(request, response) {
         var cacheControl = response.getHeader('Cache-Control')
 
@@ -202,6 +251,12 @@ class Compression {
             !this.$cacheControlNoTransformRegExp.test(cacheControl)
     }
 
+    /**
+     * toBuffer method.
+     * @param {*} chunk
+     * @param {*} encoding
+     * @returns {any}
+     */
     toBuffer(chunk, encoding) {
         return !Buffer.isBuffer(chunk) ?
             Buffer.from(chunk, encoding) :

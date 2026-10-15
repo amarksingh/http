@@ -1,4 +1,7 @@
 const bodyParser = require('body-parser');
+/**
+ * Class BodyParserJson.
+ */
 class BodyParserJson {
     $defaultOptions = {
         'bodySize': '80mb'
@@ -6,6 +9,13 @@ class BodyParserJson {
 
     $options = {};
 
+    /**
+     * handle method.
+     * @param {*} { request
+     * @param {*} response
+     * @param {*} next }
+     * @returns {any}
+     */
     handle({ request, response, next }) {
         bodyParser.json({
             ...this.$defaultOptions,

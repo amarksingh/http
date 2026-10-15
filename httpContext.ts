@@ -4,7 +4,16 @@ const url = require('url');
 const URL = require('./url')
 const RedirectResponse = require('./redirectResponse')
 
+/**
+ * Class HttpContext.
+ */
 class HttpContext extends Macroable {
+    /**
+     * Create a new instance.
+     * @param {*} request
+     * @param {*} response
+     * @param {*} next
+     */
     constructor(request, response, next) {
         super()
         Object.defineProperty(this, 'request', {
@@ -25,18 +34,35 @@ class HttpContext extends Macroable {
 
     }
 
+    /**
+     * setCurrentNext method.
+     * @param {*} next
+     * @returns {any}
+     */
     setCurrentNext(next) {
         this.$next = next
     }
 
+    /**
+     * Get redirect.
+     * @returns {any}
+     */
     get redirect() {
         return new RedirectResponse(this.response)
     }
 
+    /**
+     * Get url.
+     * @returns {any}
+     */
     get url() {
         return new URL(this.request._parsedUrl)
     }
 
+    /**
+     * next method.
+     * @returns {any}
+     */
     next() {
         this.$next(...arguments)
     }

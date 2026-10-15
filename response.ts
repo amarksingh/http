@@ -24,17 +24,33 @@ var charsetRegExp = /;\s*charset\s*=/;
 const kResponse = Symbol('response')
 const { Macroable } = require('@ostro/support/macro')
 const HttpResponseContract = require('@ostro/contracts/http/response')
+/**
+ * Class HttpResponse.
+ */
 class HttpResponse extends Macroable.extend(HttpResponseContract) {
 
+    /**
+     * Create a new instance.
+     * @param {*} res
+     */
     constructor(res) {
         super()
         Object.defineProperty(this, kResponse, { value: res })
     }
 
+    /**
+     * response method.
+     * @returns {any}
+     */
     response() {
         return this[kResponse]
     }
 
+    /**
+     * links method.
+     * @param {*} links
+     * @returns {any}
+     */
     links(links) {
         var link = this.header('Link') || '';
         if (link) link += ', ';
@@ -43,6 +59,12 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) {
         }).join(', '));
     }
 
+    /**
+     * send method.
+     * @param {*} body
+     * @param {*} status
+     * @returns {any}
+     */
     send(body, status = 200) {
         var chunk = body;
         var encoding;
@@ -131,6 +153,12 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) {
         return this;
     }
 
+    /**
+     * json method.
+     * @param {*} obj
+     * @param {*} status
+     * @returns {any}
+     */
     json(obj, status = 200) {
         var val = obj;
         this.statusCode = status
@@ -143,6 +171,12 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) {
         return this.send(body, status);
     }
 
+    /**
+     * jsonp method.
+     * @param {*} obj
+     * @param {*} rest
+     * @returns {any}
+     */
     jsonp(obj, ...rest) {
         rest = Array.from(rest)
         var callback = rest.find(arg => typeof arg == 'string' || Array.isArray(arg));
@@ -169,6 +203,11 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) {
         return this.send(body);
     }
 
+    /**
+     * sendStatus method.
+     * @param {*} statusCode
+     * @returns {any}
+     */
     sendStatus(statusCode) {
         var body = statuses[statusCode] || String(statusCode)
 
@@ -178,6 +217,13 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) {
         return this.send(body);
     }
 
+    /**
+     * sendFile method.
+     * @param {*} path
+     * @param {*} options
+     * @param {*} callback
+     * @returns {any}
+     */
     sendFile(path, options, callback) {
         var done = callback;
         var req = this.request;
@@ -212,6 +258,12 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) {
 
     }
 
+    /**
+     * download method.
+     * @param {*} path
+     * @param {*} rest
+     * @returns {any}
+     */
     download(path, ...rest) {
         rest = Array.from(rest)
         let filename = rest.find(arg => typeof arg == 'string')
@@ -238,10 +290,20 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) {
         return this.sendFile(fullPath, options, callback)
     }
 
+    /**
+     * contentType method.
+     * @param {*} type
+     * @returns {any}
+     */
     contentType(type) {
         return this.type(type)
     }
 
+    /**
+     * type method.
+     * @param {*} type
+     * @returns {any}
+     */
     type(type) {
         var ct = type.indexOf('/') === -1 ?
             mime.lookup(type) :
@@ -250,6 +312,11 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) {
         return this.header('Content-Type', ct);
     }
 
+    /**
+     * format method.
+     * @param {*} obj
+     * @returns {any}
+     */
     format(obj) {
         var req = this.request;
         var next = req.next;
@@ -281,6 +348,11 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) {
         return this;
     }
 
+    /**
+     * attachment method.
+     * @param {*} filename
+     * @returns {any}
+     */
     attachment(filename) {
         if (filename) {
             this.type(extname(filename));
@@ -291,6 +363,12 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) {
         return this;
     }
 
+    /**
+     * append method.
+     * @param {*} field
+     * @param {*} val
+     * @returns {any}
+     */
     append(field, val) {
         var prev = this.header(field);
         var value = val;
@@ -303,6 +381,12 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) {
         return this.header(field, value);
     }
 
+    /**
+     * header method.
+     * @param {*} field
+     * @param {*} val
+     * @returns {any}
+     */
     header(field, val) {
         if (arguments.length === 2) {
             var value = Array.isArray(val) ?
@@ -325,10 +409,20 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) {
         }
     }
 
+    /**
+     * get method.
+     * @param {*} field
+     * @returns {any}
+     */
     get(field) {
         return this.getHeader(field);
     }
 
+    /**
+     * location method.
+     * @param {*} url
+     * @returns {any}
+     */
     location(url) {
         var loc = url;
         if (url === 'back') {
@@ -337,6 +431,11 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) {
         return this.header('Location', encodeUrl(loc));
     }
 
+    /**
+     * vary method.
+     * @param {*} field
+     * @returns {any}
+     */
     vary(field) {
         if (!field || (Array.isArray(field) && !field.length)) {
             return this;
@@ -347,6 +446,11 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) {
         return this;
     }
 
+    /**
+     * redirect method.
+     * @param {*} url
+     * @returns {any}
+     */
     redirect(url) {
         if (!url) {
             return this
@@ -379,182 +483,401 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) {
         }
     }
 
+    /**
+     * to method.
+     * @param {*} url
+     * @returns {any}
+     */
     to(url) {
         return this.redirect(url)
     }
 
+    /**
+     * back method.
+     * @returns {any}
+     */
     back() {
         return this.redirect('back')
     }
 
+    /**
+     * continue method.
+     * @returns {any}
+     */
     continue() {
         return this.send(null, 100);
     }
 
+    /**
+     * switchingProtocols method.
+     * @returns {any}
+     */
     switchingProtocols() {
         return this.send(null, 101);
     }
 
+    /**
+     * ok method.
+     * @param {*} body
+     * @returns {any}
+     */
     ok(body) {
         return this.send(body, 200);
     }
 
+    /**
+     * created method.
+     * @param {*} body
+     * @returns {any}
+     */
     created(body) {
         return this.send(body, 201);
     }
 
+    /**
+     * accepted method.
+     * @param {*} body
+     * @returns {any}
+     */
     accepted(body) {
         return this.send(body, 202);
     }
 
+    /**
+     * nonAuthoritativeInformation method.
+     * @param {*} body
+     * @returns {any}
+     */
     nonAuthoritativeInformation(body) {
         return this.send(body, 203);
     }
 
+    /**
+     * noContent method.
+     * @returns {any}
+     */
     noContent() {
         return this.send(null, 204);
     }
 
+    /**
+     * resetContent method.
+     * @returns {any}
+     */
     resetContent() {
         return this.send(null, 205);
     }
 
+    /**
+     * partialContent method.
+     * @param {*} body
+     * @returns {any}
+     */
     partialContent(body) {
         return this.send(body, 206);
     }
 
+    /**
+     * multipleChoices method.
+     * @param {*} body
+     * @returns {any}
+     */
     multipleChoices(body) {
         return this.send(body, 300);
     }
 
+    /**
+     * movedPermanently method.
+     * @param {*} body
+     * @returns {any}
+     */
     movedPermanently(body) {
         return this.send(body, 301);
     }
 
+    /**
+     * movedTemporarily method.
+     * @param {*} body
+     * @returns {any}
+     */
     movedTemporarily(body) {
         return this.send(body, 302);
     }
 
+    /**
+     * seeOther method.
+     * @param {*} body
+     * @returns {any}
+     */
     seeOther(body) {
         return this.send(body, 303);
     }
 
+    /**
+     * notModified method.
+     * @param {*} body
+     * @returns {any}
+     */
     notModified(body) {
         return this.send(body, 304);
     }
 
+    /**
+     * useProxy method.
+     * @param {*} body
+     * @returns {any}
+     */
     useProxy(body) {
         return this.send(body, 305);
     }
 
+    /**
+     * temporaryRedirect method.
+     * @param {*} body
+     * @returns {any}
+     */
     temporaryRedirect(body) {
         return this.send(body, 307);
     }
 
+    /**
+     * badRequest method.
+     * @param {*} body
+     * @returns {any}
+     */
     badRequest(body) {
         return this.send(body, 400);
     }
 
+    /**
+     * unauthorized method.
+     * @param {*} body
+     * @returns {any}
+     */
     unauthorized(body) {
         return this.send(body, 401);
     }
 
+    /**
+     * paymentRequired method.
+     * @param {*} body
+     * @returns {any}
+     */
     paymentRequired(body) {
         return this.send(body, 402);
     }
 
+    /**
+     * forbidden method.
+     * @param {*} body
+     * @returns {any}
+     */
     forbidden(body) {
         return this.send(body, 403);
     }
 
+    /**
+     * notFound method.
+     * @param {*} body
+     * @returns {any}
+     */
     notFound(body) {
         return this.send(body, 404);
     }
 
+    /**
+     * methodNotAllowed method.
+     * @param {*} body
+     * @returns {any}
+     */
     methodNotAllowed(body) {
         return this.send(body, 405);
     }
 
+    /**
+     * notAcceptable method.
+     * @param {*} body
+     * @returns {any}
+     */
     notAcceptable(body) {
         return this.send(body, 406);
     }
 
+    /**
+     * proxyAuthenticationRequired method.
+     * @param {*} body
+     * @returns {any}
+     */
     proxyAuthenticationRequired(body) {
         return this.send(body, 407);
     }
 
+    /**
+     * requestTimeout method.
+     * @param {*} body
+     * @returns {any}
+     */
     requestTimeout(body) {
         return this.send(body, 408);
     }
 
+    /**
+     * conflict method.
+     * @param {*} body
+     * @returns {any}
+     */
     conflict(body) {
         return this.send(body, 409);
     }
 
+    /**
+     * gone method.
+     * @param {*} body
+     * @returns {any}
+     */
     gone(body) {
         return this.send(body, 410);
     }
 
+    /**
+     * lengthRequired method.
+     * @param {*} body
+     * @returns {any}
+     */
     lengthRequired(body) {
         return this.send(body, 411);
     }
 
+    /**
+     * preconditionFailed method.
+     * @param {*} body
+     * @returns {any}
+     */
     preconditionFailed(body) {
         return this.send(body, 412);
     }
 
+    /**
+     * requestEntityTooLarge method.
+     * @param {*} body
+     * @returns {any}
+     */
     requestEntityTooLarge(body) {
         return this.send(body, 413);
     }
 
+    /**
+     * requestUriTooLong method.
+     * @param {*} body
+     * @returns {any}
+     */
     requestUriTooLong(body) {
         return this.send(body, 414);
     }
 
+    /**
+     * unsupportedMediaType method.
+     * @param {*} body
+     * @returns {any}
+     */
     unsupportedMediaType(body) {
         return this.send(body, 415);
     }
 
+    /**
+     * requestedRangeNotSatisfiable method.
+     * @param {*} body
+     * @returns {any}
+     */
     requestedRangeNotSatisfiable(body) {
         return this.send(body, 416);
     }
 
+    /**
+     * expectationFailed method.
+     * @param {*} body
+     * @returns {any}
+     */
     expectationFailed(body) {
         return this.send(body, 417);
     }
 
+    /**
+     * unprocessableEntity method.
+     * @param {*} body
+     * @returns {any}
+     */
     unprocessableEntity(body) {
         return this.send(body, 422);
     }
 
+    /**
+     * tooManyRequests method.
+     * @param {*} body
+     * @returns {any}
+     */
     tooManyRequests(body) {
         return this.send(body, 429);
     }
 
+    /**
+     * internalServerError method.
+     * @param {*} body
+     * @returns {any}
+     */
     internalServerError(body) {
         return this.send(body, 500);
     }
 
+    /**
+     * notImplemented method.
+     * @param {*} body
+     * @returns {any}
+     */
     notImplemented(body) {
         return this.send(body, 501);
     }
 
+    /**
+     * badGateway method.
+     * @param {*} body
+     * @returns {any}
+     */
     badGateway(body) {
         return this.send(body, 502);
     }
 
+    /**
+     * serviceUnavailable method.
+     * @param {*} body
+     * @returns {any}
+     */
     serviceUnavailable(body) {
         return this.send(body, 503);
     }
 
+    /**
+     * gatewayTimeout method.
+     * @param {*} body
+     * @returns {any}
+     */
     gatewayTimeout(body) {
         return this.send(body, 504);
     }
 
+    /**
+     * httpVersionNotSupported method.
+     * @param {*} body
+     * @returns {any}
+     */
     httpVersionNotSupported(body) {
         return this.send(body, 505);
     }
 
+    /**
+     * toJSON method.
+     * @returns {any}
+     */
     toJSON() {
         return {
             id: this.id(),
@@ -571,9 +894,22 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) {
         };
     }
 
+    /**
+     * __get method.
+     * @param {*} target
+     * @param {*} key
+     * @returns {any}
+     */
     __get(target, key) {
         return this.make(target[kResponse], key)
     }
+    /**
+     * __set method.
+     * @param {*} target
+     * @param {*} key
+     * @param {*} value
+     * @returns {any}
+     */
     __set(target, key, value) {
         if (key in target[kResponse]) {
             return target[kResponse][key] = value

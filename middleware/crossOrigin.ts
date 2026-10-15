@@ -1,5 +1,8 @@
 const crossOrigin = require('cors');
 
+/**
+ * Class CrossOrigin.
+ */
 class CrossOrigin {
 
     // Configure allowed CORS header values as arrays for easy merging/extension
@@ -9,6 +12,13 @@ class CrossOrigin {
         'Access-Control-Allow-Headers': ["*"]
     };
 
+    /**
+     * handle method.
+     * @param {*} { request
+     * @param {*} response
+     * @param {*} next }
+     * @returns {any}
+     */
     handle({ request, response, next }) {
         // Helper: normalize header arrays to array of strings.
         // Accepts:

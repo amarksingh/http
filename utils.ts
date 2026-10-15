@@ -10,6 +10,12 @@ exports.isAbsolute = function(path) {
     if ('\\\\' === path.substring(0, 2)) return true;
 };
 
+/**
+ * acceptParams handler.
+ * @param {*} str
+ * @param {*} index
+ * @returns {any}
+ */
 function acceptParams(str, index) {
     var parts = str.split(/ *; */);
     var ret = { value: parts[0], quality: 1, params: {}, originalIndex: index };
@@ -94,6 +100,10 @@ exports.sendfile = function sendfile(res, file, options, callback) {
     var done = false;
     var streaming;
 
+    /**
+     * onaborted handler.
+     * @returns {any}
+     */
     function onaborted() {
         if (done) return;
         done = true;
@@ -103,6 +113,10 @@ exports.sendfile = function sendfile(res, file, options, callback) {
         callback(err);
     }
 
+    /**
+     * ondirectory handler.
+     * @returns {any}
+     */
     function ondirectory() {
         if (done) return;
         done = true;
@@ -112,27 +126,50 @@ exports.sendfile = function sendfile(res, file, options, callback) {
         callback(err);
     }
 
+    /**
+     * onerror handler.
+     * @param {*} err
+     * @returns {any}
+     */
     function onerror(err) {
         if (done) return;
         done = true;
         callback(err);
     }
 
+    /**
+     * onend handler.
+     * @returns {any}
+     */
     function onend() {
         if (done) return;
         done = true;
         callback();
     }
 
+    /**
+     * onfile handler.
+     * @returns {any}
+     */
     function onfile() {
         streaming = false;
     }
 
+    /**
+     * onfinish handler.
+     * @param {*} err
+     * @returns {any}
+     */
     function onfinish(err) {
         if (err && err.code === 'ECONNRESET') return onaborted();
         if (err) return onerror(err);
         if (done) return;
 
+        /**
+         * setImmediate method.
+         * @param {*} function(
+         * @returns {any}
+         */
         setImmediate(function() {
             if (streaming !== false && !done) {
                 onaborted();
@@ -145,6 +182,10 @@ exports.sendfile = function sendfile(res, file, options, callback) {
         });
     }
 
+    /**
+     * onstream handler.
+     * @returns {any}
+     */
     function onstream() {
         streaming = true;
     }

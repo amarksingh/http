@@ -1,5 +1,14 @@
 const HttpException = require('./httpException');
+/**
+ * Class ThrottleRequestsException.
+ */
 class ThrottleRequestsException extends HttpException {
+    /**
+     * Create a new instance.
+     * @param {*} $retryAfter
+     * @param {*} $message
+     * @param {*} $headers
+     */
     constructor($retryAfter = null, $message = '', $headers = {}) {
         if ($retryAfter) {
             $headers['Retry-After'] = $retryAfter;

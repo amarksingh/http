@@ -4,13 +4,29 @@ const qs = require('qs')
 const Busboy = require('busboy')
 const path = require('path')
 
+/**
+ * customizer handler.
+ * @param {*} objValue
+ * @param {*} srcValue
+ * @returns {any}
+ */
 function customizer(objValue, srcValue) {
     if (lodash.isArray(objValue)) {
         return objValue.concat(srcValue);
     }
 }
 
+/**
+ * Class FormParser.
+ */
 class FormParser {
+    /**
+     * handle method.
+     * @param {*} { request
+     * @param {*} response
+     * @param {*} next }
+     * @returns {any}
+     */
     handle({ request, response, next }) {
         if (typeof request.files != 'object') {
             request.files = {};

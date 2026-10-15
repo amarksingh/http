@@ -1,4 +1,7 @@
 const bodyParser = require('body-parser');
+/**
+ * Class BodyParserUrlEncoded.
+ */
 class BodyParserUrlEncoded {
     $defaultOptions = {
         'extended': true,
@@ -8,6 +11,13 @@ class BodyParserUrlEncoded {
     
     $options = {};
 
+    /**
+     * handle method.
+     * @param {*} { request
+     * @param {*} response
+     * @param {*} next }
+     * @returns {any}
+     */
     handle({ request, response, next }) {
         bodyParser.urlencoded({
             ...this.$defaultOptions,
