@@ -1,6 +1,9 @@
-const utils = require('../utils');
-const HttpContext = require('../httpContext');
-const RedirectResponse = require('../redirectResponse');
+const _utils = require('../utils');
+const utils = _utils.default || _utils;
+const _HttpContext = require('../httpContext');
+const HttpContext = _HttpContext.default || _HttpContext;
+const _RedirectResponse = require('../redirectResponse');
+const RedirectResponse = _RedirectResponse.default || _RedirectResponse;
 const EventEmitter = require('events');
 
 describe('Utils, HttpContext & RedirectResponse', () => {

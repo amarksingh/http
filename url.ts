@@ -26,4 +26,4 @@ class URL {
     }
 }
 
-export = URL;
+export default URL;

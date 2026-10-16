@@ -1,5 +1,5 @@
-const RedirectResponseContract = require('@ostro/contracts/http/redirectResponse')
-const { Macroable } = require('@ostro/support/macro')
+import RedirectResponseContract from '@ostro/contracts/http/redirectResponse';
+import { Macroable } from '@ostro/support/macro';
 const kUrl = Symbol('url')
 const kErrors = Symbol('errors')
 const kInputs = Symbol('inputs')
@@ -169,4 +169,4 @@ class RedirectResponse extends RedirectResponseContract {
 
 }
 
-module.exports = Macroable(RedirectResponse)
+export default Macroable(RedirectResponse);

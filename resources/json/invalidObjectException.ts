@@ -18,4 +18,4 @@ class InvalidObjectException extends Error {
     }
 }
 
-export = InvalidObjectException;
+export default InvalidObjectException;

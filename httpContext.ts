@@ -1,8 +1,8 @@
-const { Macroable } = require('@ostro/support/macro')
+import { Macroable } from '@ostro/support/macro';
 const kNext = Symbol('next')
-const url = require('url');
-const URL = require('./url')
-const RedirectResponse = require('./redirectResponse')
+import url from 'url';
+import URL from './url';
+import RedirectResponse from './redirectResponse';
 
 /**
  * Class HttpContext.
@@ -68,4 +68,4 @@ class HttpContext extends Macroable {
     }
 
 }
-module.exports = HttpContext
+export default HttpContext;

@@ -73,4 +73,4 @@ class FormParser {
     }
 }
 
-export = FormParser;
+export default FormParser;

@@ -21,4 +21,4 @@ class TokenMismatchException extends TokenMismatchExceptionContract {
     }
 }
 
-export = TokenMismatchException;
+export default TokenMismatchException;

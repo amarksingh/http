@@ -21,4 +21,4 @@ class ThrottleRequestsException extends HttpException {
     }
 }
 
-export = ThrottleRequestsException;
+export default ThrottleRequestsException;

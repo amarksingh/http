@@ -128,4 +128,4 @@ class File extends FileContract {
     }
 }
 
-export = File;
+export default File;

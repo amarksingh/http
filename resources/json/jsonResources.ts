@@ -47,4 +47,4 @@ class JsonResources {
     }
 }
 
-export = JsonResources;
+export default JsonResources;

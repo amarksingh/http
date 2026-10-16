@@ -1,10 +1,10 @@
-const proxyaddr = require('proxy-addr');
-const Buffer = require('safe-buffer').Buffer
-const contentType = require('content-type');
-const { mime } = require('send');
-const onFinished = require('on-finished');
+import proxyaddr from 'proxy-addr';
+import { Buffer } from 'safe-buffer';
+import contentType from 'content-type';
+import { mime } from 'send';
+import onFinished from 'on-finished';
 
-exports.isAbsolute = function(path) {
+export function isAbsolute(path: any) {
     if ('/' === path[0]) return true;
     if (':' === path[1] && ('\\' === path[2] || '/' === path[2])) return true;
     if ('\\\\' === path.substring(0, 2)) return true;
@@ -16,7 +16,7 @@ exports.isAbsolute = function(path) {
  * @param {*} index
  * @returns {any}
  */
-function acceptParams(str, index) {
+export function acceptParams(str: any, index?: any) {
     var parts = str.split(/ *; */);
     var ret = { value: parts[0], quality: 1, params: {}, originalIndex: index };
     for (var i = 1; i < parts.length; ++i) {
@@ -30,26 +30,26 @@ function acceptParams(str, index) {
     return ret;
 }
 
-exports.acceptParams = acceptParams;
 
-exports.normalizeType = function(type) {
+
+export function normalizeType(type: any) {
     return ~type.indexOf('/') ?
         acceptParams(type) : {
             value: mime.lookup(type),
             params: {}
         };
 };
-exports.normalizeTypes = function(types) {
+export function normalizeTypes(types: any) {
     var ret = [];
 
     for (var i = 0; i < types.length; ++i) {
-        ret.push(exports.normalizeType(types[i]));
+        ret.push(normalizeType(types[i]));
     }
 
     return ret;
 };
 
-exports.setCharset = function setCharset(type, charset) {
+export function setCharset(type: any, charset: any) {
     if (!type || !charset) {
         return type;
     }
@@ -59,7 +59,7 @@ exports.setCharset = function setCharset(type, charset) {
 };
 
 
-exports.compileTrust = function(val) {
+export function compileTrust(val: any) {
     if (typeof val === 'function') return val;
 
     if (val === true) {
@@ -81,7 +81,7 @@ exports.compileTrust = function(val) {
     return proxyaddr.compile(val || []);
 }
 
-exports.stringify = function stringify(value, replacer, spaces, escape) {
+export function stringify(value: any, replacer?: any, spaces?: any, escape?: any) {
     var json = replacer || spaces ?
         JSON.stringify(value, replacer, spaces) :
         JSON.stringify(value);
@@ -96,7 +96,7 @@ exports.stringify = function stringify(value, replacer, spaces, escape) {
     return json
 }
 
-exports.sendfile = function sendfile(res, file, options, callback) {
+export function sendfile(res: any, file: any, options: any, callback: any) {
     var done = false;
     var streaming;
 
@@ -211,3 +211,5 @@ exports.sendfile = function sendfile(res, file, options, callback) {
 
     file.pipe(res);
 }
+const utils = { isAbsolute, acceptParams, normalizeType, normalizeTypes, setCharset, compileTrust, stringify, sendfile };
+export default utils;

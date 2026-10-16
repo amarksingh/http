@@ -1,17 +1,17 @@
 import type { IHttpRequest } from '@ostro/contracts/http/request';
 
-var accepts = require('accepts');
-var { isIP } = require('net');
-const { pathToRegexp } = require('path-to-regexp', { decode: decodeURIComponent });
-var typeis = require('type-is');
-var fresh = require('fresh');
-var parseRange = require('range-parser');
-var parse = require('parseurl');
-var proxyaddr = require('proxy-addr');
-const { compileTrust } = require('./utils');
+import accepts from 'accepts';
+import { isIP } from 'net';
+import { pathToRegexp } from 'path-to-regexp';
+import typeis from 'type-is';
+import fresh from 'fresh';
+import parseRange from 'range-parser';
+import parse from 'parseurl';
+import proxyaddr from 'proxy-addr';
+import { compileTrust } from './utils';
 const kRequest = Symbol('request');
-const { Macroable } = require('@ostro/support/macro');
-const HttpRequestContract = require('@ostro/contracts/http/request');
+import { Macroable } from '@ostro/support/macro';
+import HttpRequestContract from '@ostro/contracts/http/request';
 let booleanValue = [1, "1", true, "true", "on", "yes"];
 
 /**
@@ -614,4 +614,4 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
 
 }
 
-module.exports = HttpRequest
+export default HttpRequest;

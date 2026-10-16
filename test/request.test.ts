@@ -1,4 +1,5 @@
-const HttpRequest = require('../request');
+const _HttpRequest = require('../request');
+const HttpRequest = _HttpRequest.default || _HttpRequest;
 
 describe('HttpRequest', () => {
     function createMockRawReq(overrides = {}) {

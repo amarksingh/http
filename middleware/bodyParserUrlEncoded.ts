@@ -25,4 +25,4 @@ class BodyParserUrlEncoded {
     }
 }
 
-export = BodyParserUrlEncoded;
+export default BodyParserUrlEncoded;

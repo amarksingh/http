@@ -7,4 +7,4 @@ class ResourceCollection extends jsonResources {
 
 }
 
-export = ResourceCollection;
+export default ResourceCollection;

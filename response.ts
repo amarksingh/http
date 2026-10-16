@@ -1,29 +1,26 @@
-const Buffer = require('safe-buffer').Buffer
-const contentDisposition = require('content-disposition');
-const encodeUrl = require('encodeurl');
-const escapeHtml = require('escape-html');
-const {
+import { Buffer } from 'safe-buffer';
+import contentDisposition from 'content-disposition';
+import encodeUrl from 'encodeurl';
+import escapeHtml from 'escape-html';
+import utils, {
     isAbsolute,
     normalizeType,
     normalizeTypes,
     setCharset,
     stringify,
-} = require('./utils');
-const utils = require('./utils');
+} from './utils';
 
-const {
-    extname,
-    resolve
-} = require('path');
-const statuses = require('statuses')
-const send = require('send');
+
+import { extname, resolve } from 'path';
+import statuses from 'statuses';
+import send from 'send';
 const mime = send.mime;
-const vary = require('vary');
-const etag = require('etag');
+import vary from 'vary';
+import etag from 'etag';
 var charsetRegExp = /;\s*charset\s*=/;
 const kResponse = Symbol('response');
-const { Macroable } = require('@ostro/support/macro');
-const HttpResponseContract = require('@ostro/contracts/http/response');
+import { Macroable } from '@ostro/support/macro';
+import HttpResponseContract from '@ostro/contracts/http/response';
 import type { IHttpResponse } from '@ostro/contracts/http/response';
 
 /**
@@ -923,4 +920,4 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
 
 }
 
-module.exports = HttpResponse
+export default HttpResponse;

@@ -18,4 +18,4 @@ class InvalidArrayException extends Error {
     }
 }
 
-export = InvalidArrayException;
+export default InvalidArrayException;

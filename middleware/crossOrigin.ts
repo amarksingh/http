@@ -59,4 +59,4 @@ class CrossOrigin {
     }
 }
 
-export = CrossOrigin;
+export default CrossOrigin;

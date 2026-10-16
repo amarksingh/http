@@ -267,4 +267,4 @@ class Compression {
     }
 }
 
-export = Compression;
+export default Compression;

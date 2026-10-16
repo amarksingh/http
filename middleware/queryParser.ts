@@ -20,4 +20,4 @@ class QueryParser {
     }
 }
 
-export = QueryParser;
+export default QueryParser;

@@ -23,4 +23,4 @@ class BodyParserJson {
     }
 }
 
-export = BodyParserJson;
+export default BodyParserJson;
