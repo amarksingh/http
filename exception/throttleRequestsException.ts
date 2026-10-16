@@ -1,13 +1,16 @@
-const HttpException = require('./httpException');
+import HttpException from './httpException';
+
 /**
  * Class ThrottleRequestsException.
  */
 class ThrottleRequestsException extends HttpException {
+
     /**
      * Create a new instance.
-     * @param {*} $retryAfter
-     * @param {*} $message
-     * @param {*} $headers
+     *
+     * @param retryAfter - Retry-After duration or header value.
+     * @param message - Exception message.
+     * @param headers - Response headers.
      */
     constructor($retryAfter: any = null, $message: string = '', $headers: Record<string, any> = {}) {
         if ($retryAfter) {
@@ -17,4 +20,5 @@ class ThrottleRequestsException extends HttpException {
         super(429, $message, $headers);
     }
 }
-module.exports = ThrottleRequestsException;
+
+export = ThrottleRequestsException;

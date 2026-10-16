@@ -1,8 +1,10 @@
-const jsonResources = require("./jsonResources");
+import jsonResources from './jsonResources';
+
 /**
  * Class ResourceCollection.
  */
 class ResourceCollection extends jsonResources {
 
 }
-module.exports = ResourceCollection
+
+export = ResourceCollection;

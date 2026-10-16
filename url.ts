@@ -1,22 +1,29 @@
 /**
- * Class URL.
+ * Class URL helper for accessing URL pathname segments.
  */
 class URL {
+    $url: any;
+    $segments: string[];
+
     /**
      * Create a new instance.
-     * @param {*} url
+     *
+     * @param url - Parsed URL object containing pathname.
      */
-    constructor(url: string) {
-        this.$url = url
-        this.$segments = url.pathname.split('/')
+    constructor(url: any) {
+        this.$url = url;
+        this.$segments = (url.pathname || '').split('/');
     }
+
     /**
-     * segment method.
-     * @param {*} index
-     * @returns {any}
+     * Get a pathname segment by index.
+     *
+     * @param index - Segment index.
+     * @returns Pathname segment string or undefined.
      */
-    segment(index: number) {
-        return this.$segments[index]
+    segment(index: number): string | undefined {
+        return this.$segments[index];
     }
 }
-module.exports = URL
+
+export = URL;

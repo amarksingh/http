@@ -1,47 +1,50 @@
-const InvalidArrayException = require('./invalidArrayException')
-const InvalidObjectException = require('./invalidObjectException')
-const CollectionInterface = require('@ostro/contracts/collection/collect')
+import InvalidArrayException from './invalidArrayException';
+import InvalidObjectException from './invalidObjectException';
+import CollectionInterface from '@ostro/contracts/collection/collect';
 
 /**
  * Class JsonResources.
  */
 class JsonResources {
     /**
-     * toObject method.
-     * @static
-     * @param {*} obj
-     * @returns {any}
+     * Transform data to object.
+     *
+     * @param obj - Input object.
+     * @returns Transformed object.
      */
-    static toObject(obj: any) {
-        return obj
+    static toObject<T = unknown>(obj: T): T {
+        return obj;
     }
 
     /**
-     * collection method.
-     * @static
-     * @param {*} datas
-     * @returns {any}
+     * Transform collection of data.
+     *
+     * @param datas - Array or collection of data items.
+     * @returns Array of transformed objects.
      */
-    static collection(datas: any) {
-        if (datas instanceof CollectionInterface)
-            datas = datas.all()
-        if (!Array.isArray(datas))
-            throw new InvalidArrayException(`Data should be array`)
+    static collection(datas: any): any[] {
+        if (datas instanceof CollectionInterface) {
+            datas = datas.all();
+        }
+        if (!Array.isArray(datas)) {
+            throw new InvalidArrayException(`Data should be array`);
+        }
 
-        return datas.map(data => (this.toObject(data)))
+        return datas.map(data => (this.toObject(data)));
     }
-    
+
     /**
-     * resource method.
-     * @static
-     * @param {*} obj
-     * @returns {any}
+     * Transform single resource object.
+     *
+     * @param obj - Resource object.
+     * @returns Transformed resource object.
      */
-    static resource(obj: any) {
-        if (typeof obj != 'object' || Array.isArray(obj) || obj === null)
-            throw new InvalidObjectException(`Data should be obj`)
-        return this.toObject(obj)
+    static resource<T = unknown>(obj: T): T {
+        if (typeof obj !== 'object' || Array.isArray(obj) || obj === null) {
+            throw new InvalidObjectException(`Data should be obj`);
+        }
+        return this.toObject(obj);
     }
 }
 
-module.exports = JsonResources;
+export = JsonResources;

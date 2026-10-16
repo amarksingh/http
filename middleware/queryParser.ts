@@ -1,24 +1,23 @@
-const qs = require('qs');
+import qs from 'qs';
+
 /**
  * Class QueryParser.
  */
 class QueryParser {
     
-    $extended = false;
+    $extended: boolean = false;
 
     /**
-     * handle method.
-     * @param {*} { request
-     * @param {*} response
-     * @param {*} next }
-     * @returns {any}
+     * Handle incoming request query string.
+     *
+     * @param context - Middleware context with request, response, next.
      */
-    handle({ request, response, next }: Record<string, any>) {
+    handle({ request, response, next }: Record<string, any>): void {
         request.query = qs.parse(request._parsedUrl.query, {
             allowPrototypes: this.$extended
-        })
-        next()
+        });
+        next();
     }
 }
 
-module.exports = QueryParser
+export = QueryParser;

@@ -1,16 +1,23 @@
-const FileContract = require('@ostro/contracts/container/file')
-const { v4: uuidv4 } = require('uuid');
-const path = require('path');
+import FileContract from '@ostro/contracts/container/file';
+import { v4 as uuidv4 } from 'uuid';
+import path from 'path';
+
 /**
- * Class File.
+ * Class File representing an uploaded file buffer and its metadata.
  */
 class File extends FileContract {
+    filename!: string;
+    mimetype!: string;
+    encoding!: string;
+    buffer!: Buffer;
+
     /**
-     * Create a new instance.
-     * @param {*} data
+     * Create a new File instance.
+     *
+     * @param data - File data dictionary with filename, mimetype, encoding, and buffer chunks.
      */
     constructor(data: Record<string, any>) {
-        super()
+        super();
         Object.defineProperties(this, {
             filename: {
                 value: data.filename,
@@ -40,76 +47,85 @@ class File extends FileContract {
     }
 
     /**
-     * getName method.
-     * @returns {any}
+     * Get the original file name.
+     *
+     * @returns Original filename.
      */
-    getName() {
-        return this.filename
+    getName(): string {
+        return this.filename;
     }
 
     /**
-     * getHashname method.
-     * @returns {any}
+     * Generate a hashed unique filename with extension.
+     *
+     * @returns Hashed filename.
      */
-    getHashname() {
+    getHashname(): string {
         return uuidv4().replace(/-/g, '') + '.' + this.getExtension();
     }
 
     /**
-     * getSize method.
-     * @returns {any}
+     * Get the file size in kilobytes (KB).
+     *
+     * @returns File size in KB.
      */
-    getSize() {
-        return Number((this.buffer.length / 1024).toFixed(2))
+    getSize(): number {
+        return Number((this.buffer.length / 1024).toFixed(2));
     }
 
     /**
-     * getMimetype method.
-     * @returns {any}
+     * Get the file MIME type.
+     *
+     * @returns MIME type string.
      */
-    getMimetype() {
-        return this.mimetype
+    getMimetype(): string {
+        return this.mimetype;
     }
 
     /**
-     * getBufferData method.
-     * @returns {any}
+     * Get the raw file Buffer.
+     *
+     * @returns Buffer data.
      */
-    getBufferData() {
-        return this.buffer
+    getBufferData(): Buffer {
+        return this.buffer;
     }
 
     /**
-     * getExtension method.
-     * @returns {any}
+     * Get the file extension without dot.
+     *
+     * @returns File extension.
      */
-    getExtension() {
-        return path.extname(this.filename).slice(1)
+    getExtension(): string {
+        return path.extname(this.filename).slice(1);
     }
 
     /**
-     * getType method.
-     * @returns {any}
+     * Get the storage type representation.
+     *
+     * @returns 'buffer'.
      */
-    getType() {
-        return 'buffer'
+    getType(): string {
+        return 'buffer';
     }
 
     /**
-     * extension method.
-     * @returns {any}
+     * Alias for getExtension().
+     *
+     * @returns File extension.
      */
-    extension() {
-        return this.getExtension()
+    extension(): string {
+        return this.getExtension();
     }
 
     /**
-     * isValid method.
-     * @returns {any}
+     * Check if the uploaded file is valid.
+     *
+     * @returns Always true for constructed buffers.
      */
-    isValid() {
-        return true
+    isValid(): boolean {
+        return true;
     }
-
 }
-module.exports = File
+
+export = File;

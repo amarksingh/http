@@ -1,269 +1,270 @@
-const accepts = require('accepts')
-const bytes = require('bytes')
-const compressible = require('compressible')
-const onHeaders = require('on-headers')
-const vary = require('vary')
-const zlib = require('zlib')
-const kOptions = Symbol('options')
+import accepts from 'accepts';
+import bytes from 'bytes';
+import compressible from 'compressible';
+import onHeaders from 'on-headers';
+import vary from 'vary';
+import zlib from 'zlib';
+
+const kOptions: unique symbol = Symbol('options');
+
 /**
  * Class Compression.
  */
 class Compression {
+    [kOptions]: Record<string, any>;
 
-    $defaultOptions = { threshold: 1024 };
+    $defaultOptions: Record<string, any> = { threshold: 1024 };
+    declare $options?: Record<string, any>;
 
-
-    $cacheControlNoTransformRegExp = /(?:^|,)\s*?no-transform\s*?(?:,|$)/;
+    $cacheControlNoTransformRegExp: RegExp = /(?:^|,)\s*?no-transform\s*?(?:,|$)/;
 
     /**
      * Create a new instance.
      */
     constructor() {
-        this[kOptions] = { ...(this.$defaultOptions),
+        this[kOptions] = {
+            ...(this.$defaultOptions),
             ...(this.$options || {})
-        }
+        };
     }
+
     /**
-     * handle method.
-     * @param {*} { request
-     * @param {*} response
-     * @param {*} next }
-     * @returns {any}
+     * Handle incoming request compression.
+     *
+     * @param context - Middleware context with request, response, next.
      */
-    handle({ request, response, next }: Record<string, any>) {
+    handle({ request, response, next }: Record<string, any>): void {
         if (request.httpVersion == '2.0') {
-            return next()
+            return next();
         }
-        let self = this
-        var threshold = bytes.parse(this[kOptions]['threshold'])
+        let self = this;
+        var threshold = bytes.parse(this[kOptions]['threshold']);
 
-        var ended = false
-        var length
-        var listeners = []
-        var stream
+        var ended = false;
+        var length: any;
+        var listeners: any = [];
+        var stream: any;
 
-        var _end = response.end
-        var _on = response.on
-        var _write = response.write
+        var _end = response.end;
+        var _on = response.on;
+        var _write = response.write;
 
-        response.flush = function flush() {
+        response.flush = function flush(): void {
             if (stream) {
-                stream.flush()
+                stream.flush();
             }
-        }
+        };
 
-        response.write = function write(chunk, encoding) {
+        response.write = function write(chunk: any, encoding: any): any {
             if (ended) {
-                return false
+                return false;
             }
 
             if (!this._header) {
-                this._implicitHeader()
+                this._implicitHeader();
             }
 
             return stream ?
                 stream.write(self.toBuffer(chunk, encoding)) :
-                _write.call(this, chunk, encoding)
-        }
+                _write.call(this, chunk, encoding);
+        };
 
-        response.end = function end(chunk, encoding) {
+        response.end = function end(chunk: any, encoding: any): any {
             if (ended) {
-                return false
+                return false;
             }
 
             if (!this._header) {
 
                 if (!this.getHeader('Content-Length')) {
-                    length = self.chunkLength(chunk, encoding)
+                    length = self.chunkLength(chunk, encoding);
                 }
 
-                this._implicitHeader()
+                this._implicitHeader();
             }
 
             if (!stream) {
-                return _end.call(this, chunk, encoding)
+                return _end.call(this, chunk, encoding);
             }
 
-            ended = true
+            ended = true;
 
             return chunk ?
                 stream.end(self.toBuffer(chunk, encoding)) :
-                stream.end()
-        }
+                stream.end();
+        };
 
-        response.on = function on(type, listener) {
+        response.on = function on(type: any, listener: any): any {
             if (!listeners || type !== 'drain') {
-                return _on.call(this, type, listener)
+                return _on.call(this, type, listener);
             }
 
             if (stream) {
-                return stream.on(type, listener)
+                return stream.on(type, listener);
             }
 
-            listeners.push([type, listener])
+            listeners.push([type, listener]);
 
-            return this
-        }
+            return this;
+        };
 
         /**
          * nocompress handler.
-         * @param {*} msg
-         * @returns {any}
+         *
+         * @param msg - Filter message.
          */
-        function nocompress(msg) {
-            self.addListeners(response, _on, listeners)
-            listeners = null
+        function nocompress(msg?: any): void {
+            self.addListeners(response, _on, listeners);
+            listeners = null;
         }
 
         /**
-         * onHeaders method.
-         * @param {*} response
-         * @param {*} function onResponseHeaders(
-         * @returns {any}
+         * onHeaders callback.
          */
-        onHeaders(response, function onResponseHeaders() {
+        onHeaders(response, function onResponseHeaders(): void {
 
             if (!self.shouldCompress(request, response)) {
-                nocompress(response, _on, 'filtered')
-                return
+                nocompress('filtered');
+                return;
             }
 
             if (!self.shouldTransform(request, response)) {
-                nocompress(response, _on, 'no transform')
-                return
+                nocompress('no transform');
+                return;
             }
 
-            vary(response, 'Accept-Encoding')
+            vary(response, 'Accept-Encoding');
 
             var contentLength = Number(response.getHeader('Content-Length')) || length;
             if (contentLength !== undefined && contentLength < threshold) {
-                nocompress(response, _on, 'size below threshold')
-                return
+                nocompress('size below threshold');
+                return;
             }
 
-            var encoding = response.getHeader('Content-Encoding') || 'identity'
+            var encoding = response.getHeader('Content-Encoding') || 'identity';
 
             if (encoding !== 'identity') {
-                nocompress(response, _on, 'already encoded')
-                return
+                nocompress('already encoded');
+                return;
             }
 
             if (request.method === 'HEAD') {
-                nocompress(response, _on, 'HEAD requestuest')
-                return
+                nocompress('HEAD requestuest');
+                return;
             }
 
-            var accept = accepts(request)
-            var method = accept.encoding(['gzip', 'deflate', 'identity'])
+            var accept = accepts(request);
+            var method = accept.encoding(['gzip', 'deflate', 'identity']);
 
             if (method === 'deflate' && accept.encoding(['gzip'])) {
-                method = accept.encoding(['gzip', 'identity'])
+                method = accept.encoding(['gzip', 'identity']);
             }
 
             if (!method || method === 'identity') {
-                nocompress(response, _on, 'not acceptable')
-                return
+                nocompress('not acceptable');
+                return;
             }
 
             stream = method === 'gzip' ?
                 zlib.createGzip(self[kOptions]) :
-                zlib.createDeflate(self[kOptions])
+                zlib.createDeflate(self[kOptions]);
 
-            self.addListeners(stream, stream.on, listeners)
+            self.addListeners(stream, stream.on, listeners);
 
-            response.setHeader('Content-Encoding', method)
-            response.removeHeader('Content-Length')
+            response.setHeader('Content-Encoding', method);
+            response.removeHeader('Content-Length');
 
-            stream.on('data', function onStreamData(chunk) {
+            stream.on('data', function onStreamData(chunk: any): void {
                 if (_write.call(response, chunk) === false) {
-                    stream.pause()
+                    stream.pause();
                 }
-            })
+            });
 
-            stream.on('end', function onStreamEnd() {
-                _end.call(response)
-            })
+            stream.on('end', function onStreamEnd(): void {
+                _end.call(response);
+            });
 
-            _on.call(response, 'drain', function onResponseDrain() {
-                stream.resume()
-            })
-        })
+            _on.call(response, 'drain', function onResponseDrain(): void {
+                stream.resume();
+            });
+        });
 
-        next()
-
+        next();
     }
 
     /**
-     * addListeners method.
-     * @param {*} stream
-     * @param {*} on
-     * @param {*} listeners
-     * @returns {any}
+     * Attach listeners to stream.
+     *
+     * @param stream - Target stream.
+     * @param on - On function.
+     * @param listeners - Listeners array.
      */
-    addListeners(stream: any, on: any, listeners: any) {
+    addListeners(stream: any, on: any, listeners: any): void {
         for (var i = 0; i < listeners.length; i++) {
-            on.apply(stream, listeners[i])
+            on.apply(stream, listeners[i]);
         }
     }
 
     /**
-     * chunkLength method.
-     * @param {*} chunk
-     * @param {*} encoding
-     * @returns {any}
+     * Calculate byte length of chunk.
+     *
+     * @param chunk - Chunk data.
+     * @param encoding - Character encoding.
+     * @returns Byte length.
      */
-    chunkLength(chunk: any, encoding: any) {
+    chunkLength(chunk: any, encoding: any): number {
         if (!chunk) {
-            return 0
+            return 0;
         }
 
         return !Buffer.isBuffer(chunk) ?
             Buffer.byteLength(chunk, encoding) :
-            chunk.length
+            chunk.length;
     }
 
     /**
-     * shouldCompress method.
-     * @param {*} request
-     * @param {*} response
-     * @returns {any}
+     * Determine if response should be compressed.
+     *
+     * @param request - Request instance.
+     * @param response - Response instance.
+     * @returns True if compressible.
      */
-    shouldCompress(request: any, response: any) {
-        var type = response.getHeader('Content-Type')
+    shouldCompress(request: any, response: any): boolean {
+        var type = response.getHeader('Content-Type');
 
         if (type === undefined || !compressible(type)) {
-            return false
+            return false;
         }
 
-        return true
+        return true;
     }
 
     /**
-     * shouldTransform method.
-     * @param {*} request
-     * @param {*} response
-     * @returns {any}
+     * Determine if response should be transformed.
+     *
+     * @param request - Request instance.
+     * @param response - Response instance.
+     * @returns True if transform allowed.
      */
-    shouldTransform(request: any, response: any) {
-        var cacheControl = response.getHeader('Cache-Control')
+    shouldTransform(request: any, response: any): boolean {
+        var cacheControl = response.getHeader('Cache-Control');
 
         return !cacheControl ||
-            !this.$cacheControlNoTransformRegExp.test(cacheControl)
+            !this.$cacheControlNoTransformRegExp.test(cacheControl);
     }
 
     /**
-     * toBuffer method.
-     * @param {*} chunk
-     * @param {*} encoding
-     * @returns {any}
+     * Convert chunk to buffer.
+     *
+     * @param chunk - Chunk data.
+     * @param encoding - Character encoding.
+     * @returns Buffer.
      */
-    toBuffer(chunk: any, encoding: any) {
+    toBuffer(chunk: any, encoding: any): Buffer {
         return !Buffer.isBuffer(chunk) ?
             Buffer.from(chunk, encoding) :
-            chunk
-
+            chunk;
     }
-
 }
 
-module.exports = Compression
+export = Compression;

@@ -1,29 +1,28 @@
-const bodyParser = require('body-parser');
+import bodyParser from 'body-parser';
+
 /**
  * Class BodyParserUrlEncoded.
  */
 class BodyParserUrlEncoded {
-    $defaultOptions = {
+    $defaultOptions: Record<string, any> = {
         'extended': true,
         'parameterLimist': 1000000,
         'bodySize': '80mb'
     };
     
-    $options = {};
+    $options: Record<string, any> = {};
 
     /**
-     * handle method.
-     * @param {*} { request
-     * @param {*} response
-     * @param {*} next }
-     * @returns {any}
+     * Handle incoming request.
+     *
+     * @param context - Middleware context with request, response, next.
      */
-    handle({ request, response, next }: Record<string, any>) {
+    handle({ request, response, next }: { request: any; response: any; next: (err?: any) => void }): void {
         bodyParser.urlencoded({
             ...this.$defaultOptions,
             ...this.$options
-        })(request, response, next)
+        })(request, response, next);
     }
 }
 
-module.exports = BodyParserUrlEncoded
+export = BodyParserUrlEncoded;

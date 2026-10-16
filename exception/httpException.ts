@@ -1,52 +1,55 @@
-
-const HttpExceptionContract = require('@ostro/contracts/http/httpException')
+import HttpExceptionContract from '@ostro/contracts/http/httpException';
 
 /**
  * Class HttpException.
  */
 class HttpException extends HttpExceptionContract {
-    statusCode;
-    headers = {};
-    message;
+    statusCode: number;
+    headers: Record<string, any>;
+    message: string;
+
     /**
      * Create a new instance.
-     * @param {*} $statusCode
-     * @param {*} $message
-     * @param {*} $headers
+     *
+     * @param statusCode - HTTP status code.
+     * @param message - Exception error message.
+     * @param headers - HTTP response headers.
      */
-    constructor($statusCode: any, $message: string = '', $headers: Record<string, any> = {}) {
+    constructor($statusCode: number, $message: string = '', $headers: Record<string, any> = {}) {
         super($message);
         this.name = this.constructor.name;
         this.statusCode = $statusCode;
         this.headers = $headers;
         this.message = $message;
         Error.captureStackTrace(this, this.constructor);
-
     }
 
     /**
-     * getStatusCode method.
-     * @returns {any}
+     * Get the HTTP status code.
+     *
+     * @returns HTTP status code.
      */
-    getStatusCode() {
+    getStatusCode(): number {
         return this.statusCode;
     }
 
     /**
-     * getHeaders method.
-     * @returns {any}
+     * Get the HTTP response headers.
+     *
+     * @returns Headers dictionary.
      */
-    getHeaders() {
+    getHeaders(): Record<string, any> {
         return this.headers;
     }
 
     /**
-     * setHeaders method.
-     * @param {*} $headers
-     * @returns {any}
+     * Set the HTTP response headers.
+     *
+     * @param headers - Headers dictionary.
      */
-    setHeaders($headers: Record<string, any>) {
+    setHeaders($headers: Record<string, any>): void {
         this.headers = $headers;
     }
 }
-module.exports = HttpException;
+
+export = HttpException;

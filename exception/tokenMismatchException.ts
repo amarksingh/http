@@ -1,11 +1,16 @@
-const TokenMismatchExceptionContract = require('@ostro/contracts/http/tokenMismatchException')
+import TokenMismatchExceptionContract from '@ostro/contracts/http/tokenMismatchException';
+
 /**
  * Class TokenMismatchException.
  */
 class TokenMismatchException extends TokenMismatchExceptionContract {
+    statusCode: number;
+    message: string;
+
     /**
      * Create a new instance.
-     * @param {*} message
+     *
+     * @param message - Exception message.
      */
     constructor(message: string) {
         super();
@@ -16,4 +21,4 @@ class TokenMismatchException extends TokenMismatchExceptionContract {
     }
 }
 
-module.exports = TokenMismatchException
+export = TokenMismatchException;

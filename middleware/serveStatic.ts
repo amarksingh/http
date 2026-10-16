@@ -1,29 +1,32 @@
-const serveStatic = require('serve-static');
+import serveStatic from 'serve-static';
+
 /**
  * Class ServeStatic.
  */
 class ServeStatic {
-    $defaultOptions = { 'maxAge': '180d' };
+    declare $app?: any;
+    declare options?: Record<string, any>;
 
-    $options = {};
+    $defaultOptions: Record<string, any> = { 'maxAge': '180d' };
+
+    $options: Record<string, any> = {};
+    $publicPath: string;
 
     /**
      * Create a new instance.
      */
     constructor() {
-        this.$publicPath = this.$app ? this.$app['path.public'] : (typeof $app !== 'undefined' ? $app['path.public'] : '');
+        this.$publicPath = this.$app ? this.$app['path.public'] : (typeof $app !== 'undefined' ? ($app as any)['path.public'] : '');
     }
 
     /**
-     * handle method.
-     * @param {*} { request
-     * @param {*} response
-     * @param {*} next }
-     * @returns {any}
+     * Handle static file serving.
+     *
+     * @param context - Middleware context with request, response, next.
      */
-    handle({ request, response, next }: Record<string, any>) {
-        serveStatic(this.$publicPath, { ...this.$defaultOptions, ...(this.$options || this.options || {}) })(request, response, next)
+    handle({ request, response, next }: Record<string, any>): void {
+        serveStatic(this.$publicPath, { ...this.$defaultOptions, ...(this.$options || this.options || {}) })(request, response, next);
     }
 }
 
-module.exports = ServeStatic
+export = ServeStatic;

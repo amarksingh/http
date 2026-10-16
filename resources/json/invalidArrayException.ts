@@ -2,11 +2,14 @@
  * Class InvalidArrayException.
  */
 class InvalidArrayException extends Error {
+    status: number;
+
     /**
      * Create a new instance.
-     * @param {*} message
+     *
+     * @param message - Exception message.
      */
-    constructor(message: string) {
+    constructor(message?: string) {
         super();
         this.name = this.constructor.name;
         this.status = 500;
@@ -14,4 +17,5 @@ class InvalidArrayException extends Error {
         Error.captureStackTrace(this, this.constructor);
     }
 }
-module.exports = InvalidArrayException
+
+export = InvalidArrayException;
