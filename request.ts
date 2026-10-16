@@ -19,6 +19,7 @@ let booleanValue = [1, "1", true, "true", "on", "yes"];
  */
 class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttpRequest {
     [kRequest]: any;
+    [key: string]: any;
 
     /**
      * Create a new instance.
@@ -97,9 +98,9 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * accepts method.
      * @returns {any}
      */
-    accepts() {
+    accepts(...args: any[]) {
         var accept = accepts(this);
-        return accept.types.apply(accept, arguments);
+        return accept.types.apply(accept, args);
     }
 
     /**
@@ -133,16 +134,16 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * prefers method.
      * @returns {any}
      */
-    prefers() {
-        return this.is(...arguments)
+    prefers(...args: any[]) {
+        return this.is(...args)
     }
 
     /**
      * getAcceptableContentTypes method.
      * @returns {any}
      */
-    getAcceptableContentTypes() {
-        return this.accepts(...arguments)
+    getAcceptableContentTypes(...args: any[]) {
+        return this.accepts(...args)
     }
 
     /**
@@ -176,13 +177,10 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * @param {*} types
      * @returns {any}
      */
-    is(types: any) {
-        var arr = types;
-        if (!Array.isArray(types)) {
-            arr = new Array(arguments.length);
-            for (var i = 0; i < arr.length; i++) {
-                arr[i] = arguments[i];
-            }
+    is(...types: any[]) {
+        var arr: any = types;
+        if (types.length === 1 && Array.isArray(types[0])) {
+            arr = types[0];
         }
         return typeis(this, arr);
     }
@@ -354,7 +352,8 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * @param {*} value
      * @returns {any}
      */
-    input(key: string, value: any) {
+    input(key?: string, value: any = null) {
+        if (!key) return this.all();
         return (this.all()[key] || value) || null
     }
 
@@ -456,12 +455,12 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * @param {*} key
      * @returns {any}
      */
-    has(key: string) {
-        key = !Array.isArray(key) ? [key] : key
-        return this.hasAny(key)
+    has(key: string | string[]) {
+        const keys = !Array.isArray(key) ? [key] : key;
+        return this.hasAny(keys);
     }
 
-    whenHas(key, done = () => {}, error = () => {}) {
+    whenHas(key: string, done: (val: any) => void = () => {}, error: () => void = () => {}) {
         if (this.has(key)) {
             done(this.input(key))
         } else {
@@ -469,7 +468,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
         }
     }
 
-    whenFilled(key, done = () => {}, error = () => {}) {
+    whenFilled(key: string, done: (val: any) => void = () => {}, error: () => void = () => {}) {
         let input = this.input(key)
         if (input) {
             done(input)
@@ -609,7 +608,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
     __get(target: Record<string, any>, key: string) {
         if (target.has(key))
             return target.input(key)
-        return this.make(target[kRequest], key)
+        return (this as any).make((target as any)[kRequest], key)
     }
 
 }

@@ -28,6 +28,7 @@ import type { IHttpResponse } from '@ostro/contracts/http/response';
  */
 class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHttpResponse {
     [kResponse]: any;
+    [key: string]: any;
 
     /**
      * Create a new instance.
@@ -337,7 +338,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
         } else if (fn) {
             fn();
         } else {
-            var err = new Error('Not Acceptable');
+            var err: any = new Error('Not Acceptable');
             err.status = err.statusCode = 406;
             err.types = normalizeTypes(keys).map(function (o) {
                 return o.value
@@ -387,7 +388,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} val
      * @returns {any}
      */
-    header(field: string, val: any) {
+    header(field: string, val?: any) {
         if (arguments.length === 2) {
             var value = Array.isArray(val) ?
                 val.map(String) :
@@ -901,7 +902,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @returns {any}
      */
     __get(target: Record<string, any>, key: string) {
-        return this.make(target[kResponse], key)
+        return (this as any).make((target as any)[kResponse], key)
     }
     /**
      * __set method.
@@ -911,8 +912,9 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @returns {any}
      */
     __set(target: Record<string, any>, key: string, value: any) {
-        if (key in target[kResponse]) {
-            return target[kResponse][key] = value
+        const resp = (target as any)[kResponse];
+        if (resp && key in resp) {
+            return resp[key] = value
         } else {
             return target[key] = value
         }

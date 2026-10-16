@@ -108,7 +108,7 @@ export function sendfile(res: any, file: any, options: any, callback: any) {
         if (done) return;
         done = true;
 
-        var err = new Error('Request aborted');
+        var err: any = new Error('Request aborted');
         err.code = 'ECONNABORTED';
         callback(err);
     }
@@ -121,7 +121,7 @@ export function sendfile(res: any, file: any, options: any, callback: any) {
         if (done) return;
         done = true;
 
-        var err = new Error('EISDIR, read');
+        var err: any = new Error('EISDIR, read');
         err.code = 'EISDIR';
         callback(err);
     }

@@ -70,8 +70,8 @@ class RedirectResponse extends RedirectResponseContract {
      * route method.
      * @returns {any}
      */
-    route() {
-        this[kUrl] = app('router').route(...arguments)
+    route(...args: any[]) {
+        this[kUrl] = (global as any).app('router').route(...args)
         return this.to(this[kUrl])
     }
 
@@ -163,8 +163,8 @@ class RedirectResponse extends RedirectResponseContract {
      * @param {*} method
      * @returns {any}
      */
-    static __get(target: Record<string, any>, method: string) {
-        return this.make(new target, method)
+    static __get(target: any, method: string) {
+        return (this as any).make(new target, method)
     }
 
 }

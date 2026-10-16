@@ -4,6 +4,7 @@ import TokenMismatchExceptionContract from '@ostro/contracts/http/tokenMismatchE
  * Class TokenMismatchException.
  */
 class TokenMismatchException extends TokenMismatchExceptionContract {
+    public declare name: string;
     statusCode: number;
     message: string;
 

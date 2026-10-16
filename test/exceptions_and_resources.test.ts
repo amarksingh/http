@@ -16,7 +16,8 @@ const _InvalidArrayException = require('../resources/json/invalidArrayException'
 const InvalidArrayException = _InvalidArrayException.default || _InvalidArrayException;
 const _InvalidObjectException = require('../resources/json/invalidObjectException');
 const InvalidObjectException = _InvalidObjectException.default || _InvalidObjectException;
-const CollectionInterface = require('@ostro/contracts/collection/collect');
+const _CollectionInterface = require('@ostro/contracts/collection/collect');
+const CollectionInterface = _CollectionInterface.default || _CollectionInterface;
 
 describe('URL & File & Exceptions & JSON Resources', () => {
     describe('URL', () => {
