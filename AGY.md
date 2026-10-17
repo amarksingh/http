@@ -1,7 +1,7 @@
 # @ostro/http — Antigravity AI Architecture & Knowledge Base
 
 > **Package Name**: `@ostro/http`
-> **Version**: `1.0.11`
+> **Version**: `2.0.0-alpha.1`
 > **Role in Ecosystem**: Modular Core Framework Library
 
 ---
