@@ -4,11 +4,11 @@ import bodyParser from 'body-parser';
  * Class BodyParserJson.
  */
 class BodyParserJson {
-    $defaultOptions: Record<string, any> = {
+    public $defaultOptions: Record<string, any> = {
         'bodySize': '80mb'
     };
 
-    $options: Record<string, any> = {};
+    public $options: Record<string, any> = {};
 
     /**
      * Handle incoming request.

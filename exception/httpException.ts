@@ -5,9 +5,9 @@ import HttpExceptionContract from '@ostro/contracts/http/httpException';
  */
 class HttpException extends HttpExceptionContract {
     public declare name: string;
-    statusCode: number;
-    headers: Record<string, any>;
-    message: string;
+    public statusCode: number;
+    public headers: Record<string, any>;
+    public message: string;
 
     /**
      * Create a new instance.
@@ -30,7 +30,7 @@ class HttpException extends HttpExceptionContract {
      *
      * @returns HTTP status code.
      */
-    getStatusCode(): number {
+    public getStatusCode(): number {
         return this.statusCode;
     }
 
@@ -39,7 +39,7 @@ class HttpException extends HttpExceptionContract {
      *
      * @returns Headers dictionary.
      */
-    getHeaders(): Record<string, any> {
+    public getHeaders(): Record<string, any> {
         return this.headers;
     }
 
@@ -48,7 +48,7 @@ class HttpException extends HttpExceptionContract {
      *
      * @param headers - Headers dictionary.
      */
-    setHeaders($headers: Record<string, any>): void {
+    public setHeaders($headers: Record<string, any>): void {
         this.headers = $headers;
     }
 }

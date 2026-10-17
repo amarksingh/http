@@ -2,7 +2,7 @@
  * Class InvalidObjectException.
  */
 class InvalidObjectException extends Error {
-    status: number;
+    public status: number;
 
     /**
      * Create a new instance.

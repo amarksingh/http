@@ -26,7 +26,7 @@ class FormParser {
      *
      * @param context - Middleware context with request, response, next.
      */
-    handle({ request, response, next }: Record<string, any>): void {
+    public handle({ request, response, next }: Record<string, any>): void {
         if (typeof request.files != 'object') {
             request.files = {};
         }

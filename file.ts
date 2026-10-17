@@ -51,7 +51,7 @@ class File extends FileContract {
      *
      * @returns Original filename.
      */
-    getName(): string {
+    public getName(): string {
         return this.filename;
     }
 
@@ -60,7 +60,7 @@ class File extends FileContract {
      *
      * @returns Hashed filename.
      */
-    getHashname(): string {
+    public getHashname(): string {
         return uuidv4().replace(/-/g, '') + '.' + this.getExtension();
     }
 
@@ -69,7 +69,7 @@ class File extends FileContract {
      *
      * @returns File size in KB.
      */
-    getSize(): number {
+    public getSize(): number {
         return Number((this.buffer.length / 1024).toFixed(2));
     }
 
@@ -78,7 +78,7 @@ class File extends FileContract {
      *
      * @returns MIME type string.
      */
-    getMimetype(): string {
+    public getMimetype(): string {
         return this.mimetype;
     }
 
@@ -87,7 +87,7 @@ class File extends FileContract {
      *
      * @returns Buffer data.
      */
-    getBufferData(): Buffer {
+    public getBufferData(): Buffer {
         return this.buffer;
     }
 
@@ -96,7 +96,7 @@ class File extends FileContract {
      *
      * @returns File extension.
      */
-    getExtension(): string {
+    public getExtension(): string {
         return path.extname(this.filename).slice(1);
     }
 
@@ -105,7 +105,7 @@ class File extends FileContract {
      *
      * @returns 'buffer'.
      */
-    getType(): string {
+    public getType(): string {
         return 'buffer';
     }
 
@@ -114,7 +114,7 @@ class File extends FileContract {
      *
      * @returns File extension.
      */
-    extension(): string {
+    public extension(): string {
         return this.getExtension();
     }
 
@@ -123,7 +123,7 @@ class File extends FileContract {
      *
      * @returns Always true for constructed buffers.
      */
-    isValid(): boolean {
+    public isValid(): boolean {
         return true;
     }
 }

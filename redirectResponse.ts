@@ -45,7 +45,7 @@ class RedirectResponse extends RedirectResponseContract {
      * @param {*} url
      * @returns {any}
      */
-    to(url: string) {
+    public to(url: string) {
         this[kUrl] = url
         if (this[kResponse]) {
             process.nextTick(() => {
@@ -62,7 +62,7 @@ class RedirectResponse extends RedirectResponseContract {
      * @param {*} url
      * @returns {any}
      */
-    away(url: string) {
+    public away(url: string) {
         this[kResponse].redirect(url);
     }
 
@@ -70,7 +70,7 @@ class RedirectResponse extends RedirectResponseContract {
      * route method.
      * @returns {any}
      */
-    route(...args: any[]) {
+    public route(...args: any[]) {
         this[kUrl] = (global as any).app('router').route(...args)
         return this.to(this[kUrl])
     }
@@ -80,7 +80,7 @@ class RedirectResponse extends RedirectResponseContract {
      * @param {*} errors
      * @returns {any}
      */
-    withErrors(...errors: any[]) {
+    public withErrors(...errors: any[]) {
         this[kErrors] = errors
         return this
     }
@@ -90,7 +90,7 @@ class RedirectResponse extends RedirectResponseContract {
      * @param {*} inputs
      * @returns {any}
      */
-    withInput(...inputs: any[]) {
+    public withInput(...inputs: any[]) {
         this[kInputs] = inputs.length ? inputs : [true]
         return this
     }
@@ -100,7 +100,7 @@ class RedirectResponse extends RedirectResponseContract {
      * @param {*} flash
      * @returns {any}
      */
-    with(...flash: any[]) {
+    public with(...flash: any[]) {
         this[kFlash] = flash
         return this
     }
@@ -109,7 +109,7 @@ class RedirectResponse extends RedirectResponseContract {
      * getUrl method.
      * @returns {any}
      */
-    getUrl() {
+    public getUrl() {
         return this[kUrl]
     }
 
@@ -117,7 +117,7 @@ class RedirectResponse extends RedirectResponseContract {
      * getErrors method.
      * @returns {any}
      */
-    getErrors() {
+    public getErrors() {
         return this[kErrors]
     }
 
@@ -125,7 +125,7 @@ class RedirectResponse extends RedirectResponseContract {
      * getInputs method.
      * @returns {any}
      */
-    getInputs() {
+    public getInputs() {
         return this[kInputs]
     }
 
@@ -133,7 +133,7 @@ class RedirectResponse extends RedirectResponseContract {
      * wantedInput method.
      * @returns {any}
      */
-    wantedInput() {
+    public wantedInput() {
         return this[kInputs].length
     }
 
@@ -141,7 +141,7 @@ class RedirectResponse extends RedirectResponseContract {
      * getFlash method.
      * @returns {any}
      */
-    getFlash() {
+    public getFlash() {
         return this[kFlash]
     }
 
@@ -149,7 +149,7 @@ class RedirectResponse extends RedirectResponseContract {
      * back method.
      * @returns {any}
      */
-    back() {
+    public back() {
         this[kUrl] = 'back'
         if (this[kResponse]) {
             return this.to(this[kUrl])

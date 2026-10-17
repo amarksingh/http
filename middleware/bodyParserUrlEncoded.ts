@@ -4,13 +4,13 @@ import bodyParser from 'body-parser';
  * Class BodyParserUrlEncoded.
  */
 class BodyParserUrlEncoded {
-    $defaultOptions: Record<string, any> = {
+    public $defaultOptions: Record<string, any> = {
         'extended': true,
         'parameterLimist': 1000000,
         'bodySize': '80mb'
     };
     
-    $options: Record<string, any> = {};
+    public $options: Record<string, any> = {};
 
     /**
      * Handle incoming request.

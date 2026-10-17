@@ -58,7 +58,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * @param {*} defaultValue
      * @returns {any}
      */
-    header(name: string, defaultValue: any = undefined) {
+    public header(name: string, defaultValue: any = undefined) {
         if (!name) {
             throw new TypeError('name argument is required to get');
         }
@@ -82,7 +82,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * @param {*} key
      * @returns {any}
      */
-    hasHeader(key: string) {
+    public hasHeader(key: string) {
         return typeof this.get(key) != 'undefined'
     }
 
@@ -90,7 +90,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * absolute method.
      * @returns {any}
      */
-    absolute() {
+    public absolute() {
         return this._parsedUrl;
     }
 
@@ -98,7 +98,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * accepts method.
      * @returns {any}
      */
-    accepts(...args: any[]) {
+    public accepts(...args: any[]) {
         var accept = accepts(this);
         return accept.types.apply(accept, args);
     }
@@ -107,7 +107,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * acceptsEncodings method.
      * @returns {any}
      */
-    acceptsEncodings() {
+    public acceptsEncodings() {
         var accept = accepts(this);
         return accept.encodings.apply(accept, arguments);
     }
@@ -116,7 +116,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * acceptsCharsets method.
      * @returns {any}
      */
-    acceptsCharsets() {
+    public acceptsCharsets() {
         var accept = accepts(this);
         return accept.charsets.apply(accept, arguments);
     }
@@ -125,7 +125,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * acceptsLanguages method.
      * @returns {any}
      */
-    acceptsLanguages() {
+    public acceptsLanguages() {
         var accept = accepts(this);
         return accept.languages.apply(accept, arguments);
     }
@@ -134,7 +134,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * prefers method.
      * @returns {any}
      */
-    prefers(...args: any[]) {
+    public prefers(...args: any[]) {
         return this.is(...args)
     }
 
@@ -142,7 +142,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * getAcceptableContentTypes method.
      * @returns {any}
      */
-    getAcceptableContentTypes(...args: any[]) {
+    public getAcceptableContentTypes(...args: any[]) {
         return this.accepts(...args)
     }
 
@@ -152,7 +152,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * @param {*} options
      * @returns {any}
      */
-    range(size: number, options: Record<string, any>) {
+    public range(size: number, options: Record<string, any>) {
         var range = this.get('Range');
         if (!range) return;
         return parseRange(size, range, options);
@@ -164,7 +164,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * @param {*} defaultValue
      * @returns {any}
      */
-    param(name: string, defaultValue: any) {
+    public param(name: string, defaultValue: any) {
         var params = this.params || {};
 
         if (null != params[name] && params.hasOwnProperty(name)) return params[name];
@@ -177,7 +177,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * @param {*} types
      * @returns {any}
      */
-    is(...types: any[]) {
+    public is(...types: any[]) {
         var arr: any = types;
         if (types.length === 1 && Array.isArray(types[0])) {
             arr = types[0];
@@ -189,7 +189,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * protocol method.
      * @returns {any}
      */
-    protocol() {
+    public protocol() {
         var proto = this.connection.encrypted ?
             'https' :
             'http';
@@ -209,7 +209,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * secure method.
      * @returns {any}
      */
-    secure() {
+    public secure() {
         return this.protocol() === 'https';
     }
 
@@ -217,7 +217,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * ip method.
      * @returns {any}
      */
-    ip() {
+    public ip() {
         var trust = this.app ? this.app['trust.proxy'] : undefined;
         return proxyaddr(this, compileTrust(trust));
     }
@@ -226,7 +226,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * ips method.
      * @returns {any}
      */
-    ips() {
+    public ips() {
         var trust = this.app ? this.app['trust.proxy'] : undefined;
         var addrs = proxyaddr.all(this, compileTrust(trust));
         addrs.reverse().pop()
@@ -237,7 +237,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * subdomains method.
      * @returns {any}
      */
-    subdomains() {
+    public subdomains() {
         var hostname = this.hostname();
 
         if (!hostname) return [];
@@ -252,7 +252,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * request method.
      * @returns {any}
      */
-    request() {
+    public request() {
         return this[kRequest]
     }
 
@@ -261,7 +261,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * @param {*} num
      * @returns {any}
      */
-    segment(num: any) {
+    public segment(num: any) {
         return this.segments()[num]
     }
 
@@ -269,7 +269,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * segments method.
      * @returns {any}
      */
-    segments() {
+    public segments() {
         return this.path().substr(1).split('/')
     }
 
@@ -277,7 +277,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * path method.
      * @returns {any}
      */
-    path() {
+    public path() {
         return parse(this).pathname;
     }
 
@@ -285,7 +285,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * hostname method.
      * @returns {any}
      */
-    hostname() {
+    public hostname() {
         var host = this.get('X-Forwarded-Host');
 
         var trust = this.app ? this.app['trust.proxy'] : undefined;
@@ -312,7 +312,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * @param {*} res
      * @returns {any}
      */
-    fresh(res: any) {
+    public fresh(res: any) {
         var method = this.method;
         var status = res.statusCode
         if ('GET' !== method && 'HEAD' !== method) return false;
@@ -330,7 +330,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * xhr method.
      * @returns {any}
      */
-    xhr() {
+    public xhr() {
         var val = this.get('X-Requested-With') || '';
         return val.toLowerCase() === 'xmlhttprequest';
     }
@@ -339,7 +339,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * all method.
      * @returns {any}
      */
-    all() {
+    public all() {
         return { ...this.query,
             ...this.body,
             ...this.files
@@ -352,7 +352,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * @param {*} value
      * @returns {any}
      */
-    input(key?: string, value: any = null) {
+    public input(key?: string, value: any = null) {
         if (!key) return this.all();
         return (this.all()[key] || value) || null
     }
@@ -362,7 +362,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * @param {*} key
      * @returns {any}
      */
-    boolean(key: string) {
+    public boolean(key: string) {
         return Boolean(booleanValue.includes(this.input(key)))
     }
 
@@ -371,7 +371,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * @param {*} keys
      * @returns {any}
      */
-    hasAny(keys: any[] = []) {
+    public hasAny(keys: any[] = []) {
         let allInputsKeys = Object.keys(this.all())
         return Boolean(keys.filter(value => allInputsKeys.includes(value)).length)
     }
@@ -381,7 +381,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * @param {*} key
      * @returns {any}
      */
-    filled(key: string) {
+    public filled(key: string) {
         return !!this.input(key)
     }
 
@@ -390,7 +390,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * @param {*} key
      * @returns {any}
      */
-    missing(key: string) {
+    public missing(key: string) {
         return !(key in this.all())
     }
 
@@ -400,7 +400,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * @param {*} value
      * @returns {any}
      */
-    getQuery(key: string, value: any) {
+    public getQuery(key: string, value: any) {
         return key ? (this.query[key] || value) : this.query
     }
 
@@ -410,7 +410,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * @param {*} value
      * @returns {any}
      */
-    getBody(key: string, value: any) {
+    public getBody(key: string, value: any) {
         return key ? (this.body[key] || value) : this.body
     }
 
@@ -420,7 +420,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * @param {*} value
      * @returns {any}
      */
-    add(key: string, value: any) {
+    public add(key: string, value: any) {
         this.body[key] = value
     }
 
@@ -428,7 +428,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * only method.
      * @returns {any}
      */
-    only() {
+    public only() {
         let inputKeys = Object.keys(this.all())
         inputKeys = Array.from(arguments).filter(value => inputKeys.includes(value))
         let data = {}
@@ -442,7 +442,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * except method.
      * @returns {any}
      */
-    except() {
+    public except() {
         let data = { ...this.all() }
         for (var i = 0; i <= arguments.length; i++) {
             delete data[arguments[i]]
@@ -455,7 +455,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * @param {*} key
      * @returns {any}
      */
-    has(key: string | string[]) {
+    public has(key: string | string[]) {
         const keys = !Array.isArray(key) ? [key] : key;
         return this.hasAny(keys);
     }
@@ -484,7 +484,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * @param {*} key
      * @returns {any}
      */
-    file(key: string) {
+    public file(key: string) {
         return this.files[key]
     }
 
@@ -494,7 +494,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * @param {*} value
      * @returns {any}
      */
-    hasFile(key: string, value: boolean = false) {
+    public hasFile(key: string, value: boolean = false) {
         return Boolean(this.files[key] || value)
     }
 
@@ -503,7 +503,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * @param {*} value
      * @returns {any}
      */
-    isMethod(value: any) {
+    public isMethod(value: any) {
         return Boolean(this.method && this.method.toUpperCase() === value.toUpperCase())
     }
 
@@ -511,7 +511,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * ajax method.
      * @returns {any}
      */
-    ajax() {
+    public ajax() {
         return this.xhr()
     }
 
@@ -519,7 +519,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * wantJson method.
      * @returns {any}
      */
-    wantJson() {
+    public wantJson() {
         return (this.headers.accept || '').toLowerCase() == 'application/json'
     }
 
@@ -527,7 +527,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * expectsJson method.
      * @returns {any}
      */
-    expectsJson() {
+    public expectsJson() {
         return this.wantJson()
     }
 
@@ -535,7 +535,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * fullUrl method.
      * @returns {any}
      */
-    fullUrl() {
+    public fullUrl() {
         return this.hostname() + this.url.split('?')[0]
     }
 
@@ -543,7 +543,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * fullUrlWithQuery method.
      * @returns {any}
      */
-    fullUrlWithQuery() {
+    public fullUrlWithQuery() {
         return this.hostname() + this.url
     }
 
@@ -552,7 +552,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * @param {*} except
      * @returns {any}
      */
-    fullUrlIs(except: any) {
+    public fullUrlIs(except: any) {
         return pathToRegexp(except).test(this.url)
     }
 
@@ -560,7 +560,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * getUser method.
      * @returns {any}
      */
-    getUser() {
+    public getUser() {
         return this.header('AUTH_USER');
     }
 
@@ -568,7 +568,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * bearerToken method.
      * @returns {any}
      */
-    bearerToken() {
+    public bearerToken() {
         let $header = this.header('Authorization', '');
 
         if ($header.startsWith('Bearer ')) {
@@ -580,7 +580,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * getPassword method.
      * @returns {any}
      */
-    getPassword() {
+    public getPassword() {
         return this.header('AUTH_PW');
     }
 
@@ -588,7 +588,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * getUserInfo method.
      * @returns {any}
      */
-    getUserInfo() {
+    public getUserInfo() {
         let $userinfo = this.getUser();
 
         let $pass = this.getPassword();
@@ -605,7 +605,7 @@ class HttpRequest extends Macroable.extend(HttpRequestContract) implements IHttp
      * @param {*} key
      * @returns {any}
      */
-    __get(target: Record<string, any>, key: string) {
+    public __get(target: Record<string, any>, key: string) {
         if (target.has(key))
             return target.input(key)
         return (this as any).make((target as any)[kRequest], key)

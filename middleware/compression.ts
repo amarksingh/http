@@ -13,10 +13,10 @@ const kOptions: unique symbol = Symbol('options');
 class Compression {
     [kOptions]: Record<string, any>;
 
-    $defaultOptions: Record<string, any> = { threshold: 1024 };
+    public $defaultOptions: Record<string, any> = { threshold: 1024 };
     declare $options?: Record<string, any>;
 
-    $cacheControlNoTransformRegExp: RegExp = /(?:^|,)\s*?no-transform\s*?(?:,|$)/;
+    public $cacheControlNoTransformRegExp: RegExp = /(?:^|,)\s*?no-transform\s*?(?:,|$)/;
 
     /**
      * Create a new instance.
@@ -33,7 +33,7 @@ class Compression {
      *
      * @param context - Middleware context with request, response, next.
      */
-    handle({ request, response, next }: Record<string, any>): void {
+    public handle({ request, response, next }: Record<string, any>): void {
         if (request.httpVersion == '2.0') {
             return next();
         }
@@ -199,7 +199,7 @@ class Compression {
      * @param on - On function.
      * @param listeners - Listeners array.
      */
-    addListeners(stream: any, on: any, listeners: any): void {
+    public addListeners(stream: any, on: any, listeners: any): void {
         for (var i = 0; i < listeners.length; i++) {
             on.apply(stream, listeners[i]);
         }
@@ -212,7 +212,7 @@ class Compression {
      * @param encoding - Character encoding.
      * @returns Byte length.
      */
-    chunkLength(chunk: any, encoding: any): number {
+    public chunkLength(chunk: any, encoding: any): number {
         if (!chunk) {
             return 0;
         }
@@ -229,7 +229,7 @@ class Compression {
      * @param response - Response instance.
      * @returns True if compressible.
      */
-    shouldCompress(request: any, response: any): boolean {
+    public shouldCompress(request: any, response: any): boolean {
         var type = response.getHeader('Content-Type');
 
         if (type === undefined || !compressible(type)) {
@@ -246,7 +246,7 @@ class Compression {
      * @param response - Response instance.
      * @returns True if transform allowed.
      */
-    shouldTransform(request: any, response: any): boolean {
+    public shouldTransform(request: any, response: any): boolean {
         var cacheControl = response.getHeader('Cache-Control');
 
         return !cacheControl ||
@@ -260,7 +260,7 @@ class Compression {
      * @param encoding - Character encoding.
      * @returns Buffer.
      */
-    toBuffer(chunk: any, encoding: any): Buffer {
+    public toBuffer(chunk: any, encoding: any): Buffer {
         return !Buffer.isBuffer(chunk) ?
             Buffer.from(chunk, encoding) :
             chunk;

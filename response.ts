@@ -43,7 +43,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * response method.
      * @returns {any}
      */
-    response() {
+    public response() {
         return this[kResponse]
     }
 
@@ -52,7 +52,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} links
      * @returns {any}
      */
-    links(links: any) {
+    public links(links: any) {
         var link = this.header('Link') || '';
         if (link) link += ', ';
         return this.header('Link', link + Object.keys(links).map(function (rel) {
@@ -66,7 +66,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} status
      * @returns {any}
      */
-    send(body: any, status: number = 200) {
+    public send(body: any, status: number = 200) {
         var chunk = body;
         var encoding;
         var type;
@@ -160,7 +160,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} status
      * @returns {any}
      */
-    json(obj: any, status: number = 200) {
+    public json(obj: any, status: number = 200) {
         var val = obj;
         this.statusCode = status
 
@@ -178,7 +178,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} rest
      * @returns {any}
      */
-    jsonp(obj: any, ...rest: any[]) {
+    public jsonp(obj: any, ...rest: any[]) {
         rest = Array.from(rest)
         var callback = rest.find(arg => typeof arg == 'string' || Array.isArray(arg));
         this.statusCode = rest.find(arg => typeof arg == 'number') || 200;
@@ -209,7 +209,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} statusCode
      * @returns {any}
      */
-    sendStatus(statusCode: any) {
+    public sendStatus(statusCode: any) {
         var body = statuses[statusCode] || String(statusCode)
 
         this.statusCode = statusCode;
@@ -225,7 +225,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} callback
      * @returns {any}
      */
-    sendFile(path: string, options: Record<string, any>, callback: Function) {
+    public sendFile(path: string, options: Record<string, any>, callback: Function) {
         var done = callback;
         var req = this.request;
         var res = this;
@@ -265,7 +265,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} rest
      * @returns {any}
      */
-    download(path: string, ...rest: any[]) {
+    public download(path: string, ...rest: any[]) {
         rest = Array.from(rest)
         let filename = rest.find(arg => typeof arg == 'string')
         let callback = rest.find(arg => typeof arg == 'function')
@@ -296,7 +296,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} type
      * @returns {any}
      */
-    contentType(type: string) {
+    public contentType(type: string) {
         return this.type(type)
     }
 
@@ -305,7 +305,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} type
      * @returns {any}
      */
-    type(type: string) {
+    public type(type: string) {
         var ct = type.indexOf('/') === -1 ?
             mime.lookup(type) :
             type;
@@ -318,7 +318,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} obj
      * @returns {any}
      */
-    format(obj: any) {
+    public format(obj: any) {
         var req = this.request;
         var next = req.next;
 
@@ -354,7 +354,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} filename
      * @returns {any}
      */
-    attachment(filename: any) {
+    public attachment(filename: any) {
         if (filename) {
             this.type(extname(filename));
         }
@@ -370,7 +370,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} val
      * @returns {any}
      */
-    append(field: string, val: any) {
+    public append(field: string, val: any) {
         var prev = this.header(field);
         var value = val;
 
@@ -388,7 +388,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} val
      * @returns {any}
      */
-    header(field: string, val?: any) {
+    public header(field: string, val?: any) {
         if (arguments.length === 2) {
             var value = Array.isArray(val) ?
                 val.map(String) :
@@ -424,7 +424,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} url
      * @returns {any}
      */
-    location(url: string) {
+    public location(url: string) {
         var loc = url;
         if (url === 'back') {
             loc = this.request.get('Referrer') || '/';
@@ -437,7 +437,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} field
      * @returns {any}
      */
-    vary(field: string) {
+    public vary(field: string) {
         if (!field || (Array.isArray(field) && !field.length)) {
             return this;
         }
@@ -452,7 +452,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} url
      * @returns {any}
      */
-    redirect(url: string) {
+    public redirect(url: string) {
         if (!url) {
             return this
         }
@@ -489,7 +489,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} url
      * @returns {any}
      */
-    to(url: string) {
+    public to(url: string) {
         return this.redirect(url)
     }
 
@@ -497,7 +497,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * back method.
      * @returns {any}
      */
-    back() {
+    public back() {
         return this.redirect('back')
     }
 
@@ -505,7 +505,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * continue method.
      * @returns {any}
      */
-    continue() {
+    public continue() {
         return this.send(null, 100);
     }
 
@@ -513,7 +513,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * switchingProtocols method.
      * @returns {any}
      */
-    switchingProtocols() {
+    public switchingProtocols() {
         return this.send(null, 101);
     }
 
@@ -522,7 +522,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} body
      * @returns {any}
      */
-    ok(body: any) {
+    public ok(body: any) {
         return this.send(body, 200);
     }
 
@@ -531,7 +531,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} body
      * @returns {any}
      */
-    created(body: any) {
+    public created(body: any) {
         return this.send(body, 201);
     }
 
@@ -540,7 +540,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} body
      * @returns {any}
      */
-    accepted(body: any) {
+    public accepted(body: any) {
         return this.send(body, 202);
     }
 
@@ -549,7 +549,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} body
      * @returns {any}
      */
-    nonAuthoritativeInformation(body: any) {
+    public nonAuthoritativeInformation(body: any) {
         return this.send(body, 203);
     }
 
@@ -557,7 +557,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * noContent method.
      * @returns {any}
      */
-    noContent() {
+    public noContent() {
         return this.send(null, 204);
     }
 
@@ -565,7 +565,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * resetContent method.
      * @returns {any}
      */
-    resetContent() {
+    public resetContent() {
         return this.send(null, 205);
     }
 
@@ -574,7 +574,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} body
      * @returns {any}
      */
-    partialContent(body: any) {
+    public partialContent(body: any) {
         return this.send(body, 206);
     }
 
@@ -583,7 +583,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} body
      * @returns {any}
      */
-    multipleChoices(body: any) {
+    public multipleChoices(body: any) {
         return this.send(body, 300);
     }
 
@@ -592,7 +592,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} body
      * @returns {any}
      */
-    movedPermanently(body: any) {
+    public movedPermanently(body: any) {
         return this.send(body, 301);
     }
 
@@ -601,7 +601,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} body
      * @returns {any}
      */
-    movedTemporarily(body: any) {
+    public movedTemporarily(body: any) {
         return this.send(body, 302);
     }
 
@@ -610,7 +610,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} body
      * @returns {any}
      */
-    seeOther(body: any) {
+    public seeOther(body: any) {
         return this.send(body, 303);
     }
 
@@ -619,7 +619,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} body
      * @returns {any}
      */
-    notModified(body: any) {
+    public notModified(body: any) {
         return this.send(body, 304);
     }
 
@@ -628,7 +628,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} body
      * @returns {any}
      */
-    useProxy(body: any) {
+    public useProxy(body: any) {
         return this.send(body, 305);
     }
 
@@ -637,7 +637,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} body
      * @returns {any}
      */
-    temporaryRedirect(body: any) {
+    public temporaryRedirect(body: any) {
         return this.send(body, 307);
     }
 
@@ -646,7 +646,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} body
      * @returns {any}
      */
-    badRequest(body: any) {
+    public badRequest(body: any) {
         return this.send(body, 400);
     }
 
@@ -655,7 +655,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} body
      * @returns {any}
      */
-    unauthorized(body: any) {
+    public unauthorized(body: any) {
         return this.send(body, 401);
     }
 
@@ -664,7 +664,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} body
      * @returns {any}
      */
-    paymentRequired(body: any) {
+    public paymentRequired(body: any) {
         return this.send(body, 402);
     }
 
@@ -673,7 +673,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} body
      * @returns {any}
      */
-    forbidden(body: any) {
+    public forbidden(body: any) {
         return this.send(body, 403);
     }
 
@@ -682,7 +682,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} body
      * @returns {any}
      */
-    notFound(body: any) {
+    public notFound(body: any) {
         return this.send(body, 404);
     }
 
@@ -691,7 +691,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} body
      * @returns {any}
      */
-    methodNotAllowed(body: any) {
+    public methodNotAllowed(body: any) {
         return this.send(body, 405);
     }
 
@@ -700,7 +700,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} body
      * @returns {any}
      */
-    notAcceptable(body: any) {
+    public notAcceptable(body: any) {
         return this.send(body, 406);
     }
 
@@ -709,7 +709,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} body
      * @returns {any}
      */
-    proxyAuthenticationRequired(body: any) {
+    public proxyAuthenticationRequired(body: any) {
         return this.send(body, 407);
     }
 
@@ -718,7 +718,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} body
      * @returns {any}
      */
-    requestTimeout(body: any) {
+    public requestTimeout(body: any) {
         return this.send(body, 408);
     }
 
@@ -727,7 +727,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} body
      * @returns {any}
      */
-    conflict(body: any) {
+    public conflict(body: any) {
         return this.send(body, 409);
     }
 
@@ -736,7 +736,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} body
      * @returns {any}
      */
-    gone(body: any) {
+    public gone(body: any) {
         return this.send(body, 410);
     }
 
@@ -745,7 +745,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} body
      * @returns {any}
      */
-    lengthRequired(body: any) {
+    public lengthRequired(body: any) {
         return this.send(body, 411);
     }
 
@@ -754,7 +754,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} body
      * @returns {any}
      */
-    preconditionFailed(body: any) {
+    public preconditionFailed(body: any) {
         return this.send(body, 412);
     }
 
@@ -763,7 +763,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} body
      * @returns {any}
      */
-    requestEntityTooLarge(body: any) {
+    public requestEntityTooLarge(body: any) {
         return this.send(body, 413);
     }
 
@@ -772,7 +772,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} body
      * @returns {any}
      */
-    requestUriTooLong(body: any) {
+    public requestUriTooLong(body: any) {
         return this.send(body, 414);
     }
 
@@ -781,7 +781,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} body
      * @returns {any}
      */
-    unsupportedMediaType(body: any) {
+    public unsupportedMediaType(body: any) {
         return this.send(body, 415);
     }
 
@@ -790,7 +790,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} body
      * @returns {any}
      */
-    requestedRangeNotSatisfiable(body: any) {
+    public requestedRangeNotSatisfiable(body: any) {
         return this.send(body, 416);
     }
 
@@ -799,7 +799,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} body
      * @returns {any}
      */
-    expectationFailed(body: any) {
+    public expectationFailed(body: any) {
         return this.send(body, 417);
     }
 
@@ -808,7 +808,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} body
      * @returns {any}
      */
-    unprocessableEntity(body: any) {
+    public unprocessableEntity(body: any) {
         return this.send(body, 422);
     }
 
@@ -817,7 +817,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} body
      * @returns {any}
      */
-    tooManyRequests(body: any) {
+    public tooManyRequests(body: any) {
         return this.send(body, 429);
     }
 
@@ -826,7 +826,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} body
      * @returns {any}
      */
-    internalServerError(body: any) {
+    public internalServerError(body: any) {
         return this.send(body, 500);
     }
 
@@ -835,7 +835,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} body
      * @returns {any}
      */
-    notImplemented(body: any) {
+    public notImplemented(body: any) {
         return this.send(body, 501);
     }
 
@@ -844,7 +844,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} body
      * @returns {any}
      */
-    badGateway(body: any) {
+    public badGateway(body: any) {
         return this.send(body, 502);
     }
 
@@ -853,7 +853,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} body
      * @returns {any}
      */
-    serviceUnavailable(body: any) {
+    public serviceUnavailable(body: any) {
         return this.send(body, 503);
     }
 
@@ -862,7 +862,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} body
      * @returns {any}
      */
-    gatewayTimeout(body: any) {
+    public gatewayTimeout(body: any) {
         return this.send(body, 504);
     }
 
@@ -871,7 +871,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} body
      * @returns {any}
      */
-    httpVersionNotSupported(body: any) {
+    public httpVersionNotSupported(body: any) {
         return this.send(body, 505);
     }
 
@@ -879,7 +879,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * toJSON method.
      * @returns {any}
      */
-    toJSON() {
+    public toJSON() {
         return {
             id: this.id(),
             url: this.url(),
@@ -901,7 +901,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} key
      * @returns {any}
      */
-    __get(target: Record<string, any>, key: string) {
+    public __get(target: Record<string, any>, key: string) {
         return (this as any).make((target as any)[kResponse], key)
     }
     /**
@@ -911,7 +911,7 @@ class HttpResponse extends Macroable.extend(HttpResponseContract) implements IHt
      * @param {*} value
      * @returns {any}
      */
-    __set(target: Record<string, any>, key: string, value: any) {
+    public __set(target: Record<string, any>, key: string, value: any) {
         const resp = (target as any)[kResponse];
         if (resp && key in resp) {
             return resp[key] = value

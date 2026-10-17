@@ -7,10 +7,10 @@ class ServeStatic {
     declare $app?: any;
     declare options?: Record<string, any>;
 
-    $defaultOptions: Record<string, any> = { 'maxAge': '180d' };
+    public $defaultOptions: Record<string, any> = { 'maxAge': '180d' };
 
-    $options: Record<string, any> = {};
-    $publicPath: string;
+    public $options: Record<string, any> = {};
+    public $publicPath: string;
 
     /**
      * Create a new instance.
@@ -24,7 +24,7 @@ class ServeStatic {
      *
      * @param context - Middleware context with request, response, next.
      */
-    handle({ request, response, next }: Record<string, any>): void {
+    public handle({ request, response, next }: Record<string, any>): void {
         serveStatic(this.$publicPath, { ...this.$defaultOptions, ...(this.$options || this.options || {}) })(request, response, next);
     }
 }

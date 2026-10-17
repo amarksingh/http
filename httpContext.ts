@@ -39,7 +39,7 @@ class HttpContext extends Macroable {
      * @param {*} next
      * @returns {any}
      */
-    setCurrentNext(next: Function) {
+    public setCurrentNext(next: Function) {
         this.$next = next
     }
 
@@ -47,7 +47,7 @@ class HttpContext extends Macroable {
      * Get redirect.
      * @returns {any}
      */
-    get redirect() {
+    public get redirect() {
         return new RedirectResponse(this.response)
     }
 
@@ -55,7 +55,7 @@ class HttpContext extends Macroable {
      * Get url.
      * @returns {any}
      */
-    get url() {
+    public get url() {
         return new URL(this.request._parsedUrl)
     }
 
@@ -63,7 +63,7 @@ class HttpContext extends Macroable {
      * next method.
      * @returns {any}
      */
-    next() {
+    public next() {
         this.$next(...arguments)
     }
 

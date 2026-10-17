@@ -6,7 +6,7 @@ import crossOrigin from 'cors';
 class CrossOrigin {
 
     // Configure allowed CORS header values as arrays for easy merging/extension
-    $headers: Record<string, string[]> = {
+    public $headers: Record<string, string[]> = {
         'Access-Control-Allow-Origin': ['*'],
         'Access-Control-Allow-Methods': ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
         'Access-Control-Allow-Headers': ["*"]
@@ -17,7 +17,7 @@ class CrossOrigin {
      *
      * @param context - Middleware context with request, response, next.
      */
-    handle({ request, response, next }: Record<string, any>): void {
+    public handle({ request, response, next }: Record<string, any>): void {
         // Helper: normalize header arrays to array of strings.
         // Accepts:
         // - array of strings (items may contain commas)

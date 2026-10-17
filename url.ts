@@ -2,8 +2,8 @@
  * Class URL helper for accessing URL pathname segments.
  */
 class URL {
-    $url: any;
-    $segments: string[];
+    public $url: any;
+    public $segments: string[];
 
     /**
      * Create a new instance.
@@ -21,7 +21,7 @@ class URL {
      * @param index - Segment index.
      * @returns Pathname segment string or undefined.
      */
-    segment(index: number): string | undefined {
+    public segment(index: number): string | undefined {
         return this.$segments[index];
     }
 }
