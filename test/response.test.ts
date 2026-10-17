@@ -1,4 +1,4 @@
-const _HttpResponse = require('../response');
+const _HttpResponse = require('../src/response');
 const HttpResponse = _HttpResponse.default || _HttpResponse;
 const http = require('http');
 const path = require('path');
@@ -536,7 +536,7 @@ describe('HttpResponse', () => {
         Object.defineProperty(resSf, 'request', { value: reqSf, writable: true, configurable: true });
 
         // Mock sendfile utils to return error with syscall === 'write' or code === 'ECONNABORTED'
-        const _utils = require('../utils');
+        const _utils = require('../src/utils');
 const utils = _utils.default || _utils;
         const origSendfile = utils.sendfile;
         utils.sendfile = (res, file, opts, cb) => {

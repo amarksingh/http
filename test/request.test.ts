@@ -1,4 +1,4 @@
-const _HttpRequest = require('../request');
+const _HttpRequest = require('../src/request');
 const HttpRequest = _HttpRequest.default || _HttpRequest;
 
 describe('HttpRequest', () => {
